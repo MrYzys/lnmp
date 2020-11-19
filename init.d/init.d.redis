@@ -18,11 +18,11 @@
 ### END INIT INFO
 
 REDISPORT=6379
-EXEC=/usr/local/redis/bin/redis-server
-REDIS_CLI=/usr/local/redis/bin/redis-cli
+EXEC=/fix-data/bin/redis/bin/redis-server
+REDIS_CLI=/fix-data/bin/redis/bin/redis-cli
    
 PIDFILE=/var/run/redis.pid
-CONF="/usr/local/redis/etc/redis.conf"
+CONF="/fix-data/bin/redis/etc/redis.conf"
    
 case "$1" in
     start)

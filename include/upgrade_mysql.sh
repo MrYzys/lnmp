@@ -4,7 +4,7 @@ Backup_MySQL()
 {
     echo "Starting backup all databases..."
     echo "If the database is large, the backup time will be longer."
-    /usr/local/mysql/bin/mysqldump --defaults-file=~/.my.cnf --all-databases > /root/mysql_all_backup${Upgrade_Date}.sql
+    /fix-data/bin/mysql/bin/mysqldump --defaults-file=~/.my.cnf --all-databases > /root/mysql_all_backup${Upgrade_Date}.sql
     if [ $? -eq 0 ]; then
         echo "MySQL databases backup successfully.";
     else
@@ -12,10 +12,10 @@ Backup_MySQL()
         exit 1
     fi
     lnmp stop
-    mv /usr/local/mysql /usr/local/oldmysql${Upgrade_Date}
-    mv /etc/init.d/mysql /usr/local/oldmysql${Upgrade_Date}/init.d.mysql.bak.${Upgrade_Date}
-    mv /etc/my.cnf /usr/local/oldmysql${Upgrade_Date}/my.cnf.bak.${Upgrade_Date}
-    if [ "${MySQL_Data_Dir}" != "/usr/local/mysql/var" ]; then
+    mv /fix-data/bin/mysql /fix-data/bin/oldmysql${Upgrade_Date}
+    mv /etc/init.d/mysql /fix-data/bin/oldmysql${Upgrade_Date}/init.d.mysql.bak.${Upgrade_Date}
+    mv /etc/my.cnf /fix-data/bin/oldmysql${Upgrade_Date}/my.cnf.bak.${Upgrade_Date}
+    if [ "${MySQL_Data_Dir}" != "/fix-data/bin/mysql/var" ]; then
         mv ${MySQL_Data_Dir} ${MySQL_Data_Dir}${Upgrade_Date}
     fi
     if echo "${mysql_version}" | grep -Eqi '^5.5.' &&  echo "${cur_mysql_version}" | grep -Eqi '^5.6.';then
@@ -28,9 +28,9 @@ Upgrade_MySQL51()
     Tar_Cd mysql-${mysql_version}.tar.gz mysql-${mysql_version}
     MySQL_Gcc7_Patch
     if [ $InstallInnodb = "y" ]; then
-        ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile --with-plugins=innobase ${MySQL51MAOpt}
+        ./configure --prefix=/fix-data/bin/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile --with-plugins=innobase ${MySQL51MAOpt}
     else
-        ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile ${MySQL51MAOpt}
+        ./configure --prefix=/fix-data/bin/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile ${MySQL51MAOpt}
     fi
     sed -i '/set -ex;/,/done/d' Makefile
     Make_Install
@@ -111,15 +111,15 @@ EOF
         mkdir -p ${MySQL_Data_Dir}
     fi
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    /fix-data/bin/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-/usr/local/mysql/lib
-/usr/local/lib
+/fix-data/bin/mysql/lib
+/fix-data/bin/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 }
 
 Upgrade_MySQL55()
@@ -129,7 +129,7 @@ Upgrade_MySQL55()
     Tar_Cd mysql-${mysql_version}.tar.gz mysql-${mysql_version}
     MySQL_ARM_Patch
     MySQL_Gcc7_Patch
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
     Make_Install
 
     groupadd mysql
@@ -210,22 +210,22 @@ EOF
         mkdir -p ${MySQL_Data_Dir}
     fi
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    /fix-data/bin/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-/usr/local/mysql/lib
-/usr/local/lib
+/fix-data/bin/mysql/lib
+/fix-data/bin/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 }
 
 Upgrade_MySQL56()
 {
     echo "Starting upgrade MySQL..."
     Tar_Cd mysql-${mysql_version}.tar.gz mysql-${mysql_version}
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
     Make_Install
 
     groupadd mysql
@@ -337,16 +337,16 @@ EOF
         mkdir -p ${MySQL_Data_Dir}
     fi
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    /fix-data/bin/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-/usr/local/mysql/lib
-/usr/local/lib
+/fix-data/bin/mysql/lib
+/fix-data/bin/lib
 EOF
 
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 }
 
 Upgrade_MySQL57()
@@ -354,7 +354,7 @@ Upgrade_MySQL57()
     echo "Starting upgrade MySQL..."
     Tar_Cd ${mysql_src} mysql-${mysql_version}
     Install_Boost
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
     Make_Install
 
     groupadd mysql
@@ -432,16 +432,16 @@ EOF
         mkdir -p ${MySQL_Data_Dir}
     fi
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/bin/mysqld --initialize-insecure --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    /fix-data/bin/mysql/bin/mysqld --initialize-insecure --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-/usr/local/mysql/lib
-/usr/local/lib
+/fix-data/bin/mysql/lib
+/fix-data/bin/lib
 EOF
 
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 }
 
 Upgrade_MySQL80()
@@ -450,7 +450,7 @@ Upgrade_MySQL80()
     Tar_Cd ${mysql_src} mysql-${mysql_version}
     Install_Boost
     mkdir build && cd build
-    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
+    cmake .. -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
     Make_Install
 
     groupadd mysql
@@ -528,21 +528,21 @@ EOF
         mkdir -p ${MySQL_Data_Dir}
     fi
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/bin/mysqld --initialize-insecure --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    /fix-data/bin/mysql/bin/mysqld --initialize-insecure --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-/usr/local/mysql/lib
-/usr/local/lib
+/fix-data/bin/mysql/lib
+/fix-data/bin/lib
 EOF
 
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 }
 
 Restore_Start_MySQL()
 {
-    chgrp -R mysql /usr/local/mysql/.
+    chgrp -R mysql /fix-data/bin/mysql/.
     \cp support-files/mysql.server /etc/init.d/mysql
     chmod 755 /etc/init.d/mysql
 
@@ -552,16 +552,16 @@ Restore_Start_MySQL()
     /etc/init.d/mysql start
 
     echo "Restore backup databases..."
-    /usr/local/mysql/bin/mysql --defaults-file=~/.my.cnf < /root/mysql_all_backup${Upgrade_Date}.sql
+    /fix-data/bin/mysql/bin/mysql --defaults-file=~/.my.cnf < /root/mysql_all_backup${Upgrade_Date}.sql
     echo "Repair databases..."
-    /usr/local/mysql/bin/mysql_upgrade -u root -p${DB_Root_Password}
+    /fix-data/bin/mysql/bin/mysql_upgrade -u root -p${DB_Root_Password}
 
     /etc/init.d/mysql stop
     TempMycnf_Clean
     cd ${cur_dir} && rm -rf ${cur_dir}/src/mysql-${mysql_version}
 
     lnmp start
-    if [[ -s /usr/local/mysql/bin/mysql && -s /usr/local/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+    if [[ -s /fix-data/bin/mysql/bin/mysql && -s /fix-data/bin/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
         Echo_Green "======== upgrade MySQL completed ======"
     else
         Echo_Red "======== upgrade MySQL failed ======"
@@ -580,7 +580,7 @@ Upgrade_MySQL()
 
     Verify_DB_Password
 
-    cur_mysql_version=`/usr/local/mysql/bin/mysql_config --version`
+    cur_mysql_version=`/fix-data/bin/mysql/bin/mysql_config --version`
     mysql_version=""
     echo "Current MYSQL Version:${cur_mysql_version}"
     echo "You can get version number from http://dev.mysql.com/downloads/mysql/"
@@ -624,10 +624,10 @@ Upgrade_MySQL()
     echo "You will upgrade MySQL Version to ${mysql_version}"
     echo "=================================================="
 
-    if [ -s /usr/local/include/jemalloc/jemalloc.h ] && lsof -n|grep "libjemalloc.so"|grep -q "mysqld"; then
+    if [ -s /fix-data/bin/include/jemalloc/jemalloc.h ] && lsof -n|grep "libjemalloc.so"|grep -q "mysqld"; then
         MySQL51MAOpt='--with-mysqld-ldflags=-ljemalloc'
         MySQL55MAOpt="-DCMAKE_EXE_LINKER_FLAGS='-ljemalloc' -DWITH_SAFEMALLOC=OFF"
-    elif [ -s /usr/local/include/gperftools/tcmalloc.h ] && lsof -n|grep "libtcmalloc.so"|grep -q "mysqld"; then
+    elif [ -s /fix-data/bin/include/gperftools/tcmalloc.h ] && lsof -n|grep "libtcmalloc.so"|grep -q "mysqld"; then
         MySQL51MAOpt='--with-mysqld-ldflags=-ltcmalloc'
         MySQL55MAOpt="-DCMAKE_EXE_LINKER_FLAGS='-ltcmalloc' -DWITH_SAFEMALLOC=OFF"
     else

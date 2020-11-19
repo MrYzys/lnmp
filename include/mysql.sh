@@ -31,16 +31,16 @@ MySQL_Sec_Setting()
     fi
     /etc/init.d/mysql start
 
-    ln -sf /usr/local/mysql/bin/mysql /usr/bin/mysql
-    ln -sf /usr/local/mysql/bin/mysqldump /usr/bin/mysqldump
-    ln -sf /usr/local/mysql/bin/myisamchk /usr/bin/myisamchk
-    ln -sf /usr/local/mysql/bin/mysqld_safe /usr/bin/mysqld_safe
-    ln -sf /usr/local/mysql/bin/mysqlcheck /usr/bin/mysqlcheck
+    ln -sf /fix-data/bin/mysql/bin/mysql /usr/bin/mysql
+    ln -sf /fix-data/bin/mysql/bin/mysqldump /usr/bin/mysqldump
+    ln -sf /fix-data/bin/mysql/bin/myisamchk /usr/bin/myisamchk
+    ln -sf /fix-data/bin/mysql/bin/mysqld_safe /usr/bin/mysqld_safe
+    ln -sf /fix-data/bin/mysql/bin/mysqlcheck /usr/bin/mysqlcheck
 
     /etc/init.d/mysql restart
     sleep 2
 
-    /usr/local/mysql/bin/mysqladmin -u root password "${DB_Root_Password}"
+    /fix-data/bin/mysql/bin/mysqladmin -u root password "${DB_Root_Password}"
     if [ $? -ne 0 ]; then
         echo "failed, try other way..."
         /etc/init.d/mysql restart
@@ -50,15 +50,15 @@ user=root
 password=''
 EOF
         if [ "${DBSelect}" = "4" ] || echo "${mysql_version}" | grep -Eqi '^5.7.'; then
-            /usr/local/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${DB_Root_Password}');"
+            /fix-data/bin/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${DB_Root_Password}');"
             [ $? -eq 0 ] && echo "Set password Sucessfully." || echo "Set password failed!"
         elif [ "${DBSelect}" = "5" ] || echo "${mysql_version}" | grep -Eqi '^8.0.'; then
-            /usr/local/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "SET PASSWORD FOR 'root'@'localhost' = '${DB_Root_Password}';"
+            /fix-data/bin/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "SET PASSWORD FOR 'root'@'localhost' = '${DB_Root_Password}';"
             [ $? -eq 0 ] && echo "Set password Sucessfully." || echo "Set password failed!"
         else
-            /usr/local/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "UPDATE mysql.user SET Password=PASSWORD('${DB_Root_Password}') WHERE User='root';"
+            /fix-data/bin/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "UPDATE mysql.user SET Password=PASSWORD('${DB_Root_Password}') WHERE User='root';"
             [ $? -eq 0 ] && echo "Set password Sucessfully." || echo "Set password failed!"
-            /usr/local/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "FLUSH PRIVILEGES;"
+            /fix-data/bin/mysql/bin/mysql --defaults-file=~/.emptymy.cnf -e "FLUSH PRIVILEGES;"
             [ $? -eq 0 ] && echo "FLUSH PRIVILEGES Sucessfully." || echo "FLUSH PRIVILEGES failed!"
         fi
         rm -f ~/.emptymy.cnf
@@ -193,9 +193,9 @@ Install_MySQL_51()
     Tar_Cd ${Mysql_Ver}.tar.gz ${Mysql_Ver}
     MySQL_Gcc7_Patch
     if [ "${InstallInnodb}" = "y" ]; then
-        ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile --with-plugins=innobase ${MySQL51MAOpt}
+        ./configure --prefix=/fix-data/bin/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile --with-plugins=innobase ${MySQL51MAOpt}
     else
-        ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile ${MySQL51MAOpt}
+        ./configure --prefix=/fix-data/bin/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-assembler --with-mysqld-ldflags=-all-static --with-charset=utf8 --enable-thread-safe-client --with-big-tables --with-readline --with-ssl --with-embedded-server --enable-local-infile ${MySQL51MAOpt}
     fi
     sed -i '/set -ex;/,/done/d' Makefile
     Make_Install
@@ -273,19 +273,19 @@ EOF
     MySQL_Opt
     Check_MySQL_Data_Dir
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/bin/mysql_install_db --user=mysql --datadir=${MySQL_Data_Dir}
-    chgrp -R mysql /usr/local/mysql/.
-    \cp /usr/local/mysql/share/mysql/mysql.server /etc/init.d/mysql
+    /fix-data/bin/mysql/bin/mysql_install_db --user=mysql --datadir=${MySQL_Data_Dir}
+    chgrp -R mysql /fix-data/bin/mysql/.
+    \cp /fix-data/bin/mysql/share/mysql/mysql.server /etc/init.d/mysql
     chmod 755 /etc/init.d/mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-    /usr/local/mysql/lib/mysql
-    /usr/local/lib
+    /fix-data/bin/mysql/lib/mysql
+    /fix-data/bin/lib
 EOF
     ldconfig
 
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
 }
@@ -297,7 +297,7 @@ Install_MySQL_55()
     Tar_Cd ${Mysql_Ver}.tar.gz ${Mysql_Ver}
     MySQL_ARM_Patch
     MySQL_Gcc7_Patch
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
     Make_Install
 
     groupadd mysql
@@ -375,19 +375,19 @@ EOF
     MySQL_Opt
     Check_MySQL_Data_Dir
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
-    chgrp -R mysql /usr/local/mysql/.
+    /fix-data/bin/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    chgrp -R mysql /fix-data/bin/mysql/.
     \cp support-files/mysql.server /etc/init.d/mysql
     \cp ${cur_dir}/init.d/mysql.service /etc/systemd/system/mysql.service
     chmod 755 /etc/init.d/mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-/usr/local/mysql/lib
-/usr/local/lib
+/fix-data/bin/mysql/lib
+/fix-data/bin/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
 }
@@ -397,7 +397,7 @@ Install_MySQL_56()
     Echo_Blue "[+] Installing ${Mysql_Ver}..."
     rm -f /etc/my.cnf
     Tar_Cd ${Mysql_Ver}.tar.gz ${Mysql_Ver}
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
     Make_Install
 
     groupadd mysql
@@ -506,19 +506,19 @@ EOF
     MySQL_Opt
     Check_MySQL_Data_Dir
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
-    chgrp -R mysql /usr/local/mysql/.
+    /fix-data/bin/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    chgrp -R mysql /fix-data/bin/mysql/.
     \cp support-files/mysql.server /etc/init.d/mysql
     \cp ${cur_dir}/init.d/mysql.service /etc/systemd/system/mysql.service
     chmod 755 /etc/init.d/mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-    /usr/local/mysql/lib
-    /usr/local/lib
+    /fix-data/bin/mysql/lib
+    /fix-data/bin/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
 }
@@ -529,7 +529,7 @@ Install_MySQL_57()
     rm -f /etc/my.cnf
     Tar_Cd ${Mysql_Ver}.tar.gz ${Mysql_Ver}
     Install_Boost
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
     Make_Install
 
     groupadd mysql
@@ -604,19 +604,19 @@ EOF
     MySQL_Opt
     Check_MySQL_Data_Dir
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/bin/mysqld --initialize-insecure --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
-    chgrp -R mysql /usr/local/mysql/.
+    /fix-data/bin/mysql/bin/mysqld --initialize-insecure --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    chgrp -R mysql /fix-data/bin/mysql/.
     \cp support-files/mysql.server /etc/init.d/mysql
     \cp ${cur_dir}/init.d/mysql.service /etc/systemd/system/mysql.service
     chmod 755 /etc/init.d/mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-    /usr/local/mysql/lib
-    /usr/local/lib
+    /fix-data/bin/mysql/lib
+    /fix-data/bin/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
 }
@@ -628,7 +628,7 @@ Install_MySQL_80()
     Tar_Cd ${Mysql_Ver}.tar.gz ${Mysql_Ver}
     Install_Boost
     mkdir build && cd build
-    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
+    cmake .. -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mysql -DSYSCONFDIR=/etc -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MySQL_WITH_BOOST}
     Make_Install
 
     groupadd mysql
@@ -703,19 +703,19 @@ EOF
     MySQL_Opt
     Check_MySQL_Data_Dir
     chown -R mysql:mysql ${MySQL_Data_Dir}
-    /usr/local/mysql/bin/mysqld --initialize-insecure --basedir=/usr/local/mysql --datadir=${MySQL_Data_Dir} --user=mysql
-    chgrp -R mysql /usr/local/mysql/.
+    /fix-data/bin/mysql/bin/mysqld --initialize-insecure --basedir=/fix-data/bin/mysql --datadir=${MySQL_Data_Dir} --user=mysql
+    chgrp -R mysql /fix-data/bin/mysql/.
     \cp support-files/mysql.server /etc/init.d/mysql
     \cp ${cur_dir}/init.d/mysql.service /etc/systemd/system/mysql.service
     chmod 755 /etc/init.d/mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-    /usr/local/mysql/lib
-    /usr/local/lib
+    /fix-data/bin/mysql/lib
+    /fix-data/bin/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /fix-data/bin/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /fix-data/bin/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
 }

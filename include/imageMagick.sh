@@ -32,7 +32,7 @@ Install_ImageMagic()
     ldconfig
 
     cd ${cur_dir}/src
-    if [ -s /usr/local/imagemagick/bin/convert ]; then
+    if [ -s /fix-data/bin/imagemagick/bin/convert ]; then
         echo "ImageMagick already exists."
     else
         if echo "${Cur_PHP_Version}" | grep -Eqi '^5.2.';then
@@ -43,7 +43,7 @@ Install_ImageMagic()
             TarJ_Cd ${ImageMagick_Ver}.tar.xz ${ImageMagick_Ver}
         fi
 
-        ./configure --prefix=/usr/local/imagemagick
+        ./configure --prefix=/fix-data/bin/imagemagick
         Make_Install
         cd ../
         rm -rf ${cur_dir}/src/${ImageMagick_Ver}
@@ -57,7 +57,7 @@ Install_ImageMagic()
         Tar_Cd ${Imagick_Ver}.tgz ${Imagick_Ver}
     fi
     ${PHP_Path}/bin/phpize
-    ./configure --with-php-config=${PHP_Path}/bin/php-config --with-imagick=/usr/local/imagemagick
+    ./configure --with-php-config=${PHP_Path}/bin/php-config --with-imagick=/fix-data/bin/imagemagick
     Make_Install
     cd ../
 
@@ -65,7 +65,7 @@ Install_ImageMagic()
 extension = "imagick.so"
 EOF
 
-    if [ -s "${zend_ext}" ] && [ -s /usr/local/imagemagick/bin/convert ]; then
+    if [ -s "${zend_ext}" ] && [ -s /fix-data/bin/imagemagick/bin/convert ]; then
         Restart_PHP
         Echo_Green "====== ImageMagick install completed ======"
         Echo_Green "ImageMagick installed successfully, enjoy it!"
@@ -81,7 +81,7 @@ Uninstall_ImageMagick()
     Press_Start
     rm -f ${PHP_Path}/conf.d/008-imagick.ini
     echo "Delete ImageMagick directory..."
-    rm -rf /usr/local/imagemagick
+    rm -rf /fix-data/bin/imagemagick
     Restart_PHP
     Echo_Green "Uninstall ImageMagick completed."
 }

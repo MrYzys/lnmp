@@ -56,7 +56,7 @@ lnmp.conf配置文件，可以修改lnmp.conf自定义下载服务器地址、�
 **请勿安装多个缓存类扩展模块，多个可能导致网站出现问题 ！**
 
 #### 图像处理：
-* imageMagick安装卸载执行：`./addons.sh {install|uninstall} imageMagick` imageMagick路径：/usr/local/imagemagick/bin/。
+* imageMagick安装卸载执行：`./addons.sh {install|uninstall} imageMagick` imageMagick路径：/fix-data/bin/imagemagick/bin/。
 
 #### 解密：
 * IonCube安装执行：`./addons.sh {install|uninstall} ionCube`。
@@ -147,23 +147,23 @@ MariaDB 10.4 | 10 | PHP 7.4 | 10 | | | |
 ## LNMP相关目录文件
 
 ### 目录位置
-* Nginx：/usr/local/nginx/
-* MySQL：/usr/local/mysql/
-* MariaDB：/usr/local/mariadb/
-* PHP：/usr/local/php/
-* 多PHP目录：/usr/local/php5.6/ 版本号随安装版本不同而不同
-* PHP扩展插件配置文件目录：/usr/local/php/conf.d/
+* Nginx：/fix-data/bin/nginx/
+* MySQL：/fix-data/bin/mysql/
+* MariaDB：/fix-data/bin/mariadb/
+* PHP：/fix-data/bin/php/
+* 多PHP目录：/fix-data/bin/php5.6/ 版本号随安装版本不同而不同
+* PHP扩展插件配置文件目录：/fix-data/bin/php/conf.d/
 * PHPMyAdmin：/home/wwwroot/default/phpmyadmin/
 * 默认虚拟主机网站目录：/home/wwwroot/default/
 * Nginx日志目录：/home/wwwlogs/
 
 ### 配置文件：
-* Nginx主配置文件：/usr/local/nginx/conf/nginx.conf
+* Nginx主配置文件：/fix-data/bin/nginx/conf/nginx.conf
 * MySQL/MariaDB配置文件：/etc/my.cnf
-* PHP配置文件：/usr/local/php/etc/php.ini
-* PHP-FPM配置文件：/usr/local/php/etc/php-fpm.conf
-* PureFtpd配置文件：/usr/local/pureftpd/etc/pure-ftpd.conf
-* Apache配置文件：/usr/local/apache/conf/httpd.conf
+* PHP配置文件：/fix-data/bin/php/etc/php.ini
+* PHP-FPM配置文件：/fix-data/bin/php/etc/php-fpm.conf
+* PureFtpd配置文件：/fix-data/bin/pureftpd/etc/pure-ftpd.conf
+* Apache配置文件：/fix-data/bin/apache/conf/httpd.conf
 
 ### lnmp.conf 配置文件参数说明
 
@@ -172,8 +172,8 @@ MariaDB 10.4 | 10 | PHP 7.4 | 10 | | | |
 |Download_Mirror|下载镜像|一般默认，如异常可[修改下载镜像](https://lnmp.org/faq/download-url.html)|
 |Nginx_Modules_Options|添加Nginx模块或其他编译参数|--add-module=/第三方模块源码目录|
 |PHP_Modules_Options|添加PHP模块或编译参数|--enable-exif 有些模块需提前安装好依赖包|
-|MySQL_Data_Dir|MySQL数据库目录设置|默认/usr/local/mysql/var|
-|MariaDB_Data_Dir|MariaDB数据库目录设置|默认/usr/local/mariadb/var|
+|MySQL_Data_Dir|MySQL数据库目录设置|默认/fix-data/bin/mysql/var|
+|MariaDB_Data_Dir|MariaDB数据库目录设置|默认/fix-data/bin/mariadb/var|
 |Default_Website_Dir|默认虚拟主机网站目录位置|默认/home/wwwroot/default|
 |Enable_Nginx_Openssl|Nginx是否使用新版openssl|默认 y，建议不修改，y是启用并开启到http2|
 |Enable_PHP_Fileinfo|是否安装开启php的fileinfo模块|默认n，根据自己情况而定，安装启用的话改成 y|

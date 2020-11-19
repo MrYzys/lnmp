@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -76,12 +76,12 @@ if [ "${isSSL}" == "ssl" ]; then
             Echo_Yellow "Please enter domain(example: www.lnmp.org): "
             read domain
             if [ "${domain}" != "" ]; then
-                if [ ! -f "/usr/local/nginx/conf/vhost/${domain}.conf" ]; then
+                if [ ! -f "/fix-data/bin/nginx/conf/vhost/${domain}.conf" ]; then
                     Echo_Red "${domain} is not exist,please check!"
                     exit 1
                 else
                     echo " Your domain: ${domain}"
-                    if ! grep -q "/etc/letsencrypt/live/${domain}/fullchain.pem" "/usr/local/nginx/conf/vhost/${domain}.conf"; then
+                    if ! grep -q "/etc/letsencrypt/live/${domain}/fullchain.pem" "/fix-data/bin/nginx/conf/vhost/${domain}.conf"; then
                         Echo_Red "SSL configuration NOT found in the ${domain} config file!"
                         exit 1
                     fi
@@ -122,19 +122,19 @@ if [ "${isSSL}" == "ssl" ]; then
             letsdomain="-d ${domain}"
         fi
 
-        if [ -s /usr/local/acme.sh/acme.sh ]; then
-            echo "/usr/local/acme.sh/acme.sh [found]"
+        if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+            echo "/fix-data/bin/acme.sh/acme.sh [found]"
         else
             cd /tmp
             [[ -f latest.tar.gz ]] && rm -f latest.tar.gz
             wget https://soft.vpser.net/lib/acme.sh/latest.tar.gz --prefer-family=IPv4 --no-check-certificate
             tar zxf latest.tar.gz
             cd acme.sh-*
-            ./acme.sh --install --log --home /usr/local/acme.sh --certhome /usr/local/nginx/conf/ssl
+            ./acme.sh --install --log --home /fix-data/bin/acme.sh --certhome /fix-data/bin/nginx/conf/ssl
             cd ..
             rm -f latest.tar.gz
             rm -rf acme.sh-*
-            sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /usr/local/acme.sh/acme.sh
+            sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /fix-data/bin/acme.sh/acme.sh
             if command -v yum >/dev/null 2>&1; then
                 yum -y update nss
                 service crond restart
@@ -145,21 +145,21 @@ if [ "${isSSL}" == "ssl" ]; then
             fi
         fi
 
-        . "/usr/local/acme.sh/acme.sh.env"
+        . "/fix-data/bin/acme.sh/acme.sh.env"
 
-        if [ -s /usr/local/nginx/conf/ssl/${domain}/fullchain.cer ]; then
+        if [ -s /fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer ]; then
             echo "Removing exist domain certificate..."
-            rm -rf /usr/local/nginx/conf/ssl/${domain}
+            rm -rf /fix-data/bin/nginx/conf/ssl/${domain}
         fi
 
         echo "Starting create SSL Certificate use Let's Encrypt..."
-        /usr/local/acme.sh/acme.sh --issue ${letsdomain} -w ${vhostdir} --reloadcmd "/etc/init.d/nginx reload"
+        /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} -w ${vhostdir} --reloadcmd "/etc/init.d/nginx reload"
         lets_status=$?
         if [ "${lets_status}" = 0 ]; then
             Echo_Green "Let's Encrypt SSL Certificate create successfully."
             echo "Modify ${domain} configure..."
-            sed -i "s@/etc/letsencrypt/live/${domain}/fullchain.pem@/usr/local/nginx/conf/ssl/${domain}/fullchain.cer@g" "/usr/local/nginx/conf/vhost/${domain}.conf"
-            sed -i "s@/etc/letsencrypt/live/${domain}/privkey.pem@/usr/local/nginx/conf/ssl/${domain}/${domain}.key@g" "/usr/local/nginx/conf/vhost/${domain}.conf"
+            sed -i "s@/etc/letsencrypt/live/${domain}/fullchain.pem@/fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer@g" "/fix-data/bin/nginx/conf/vhost/${domain}.conf"
+            sed -i "s@/etc/letsencrypt/live/${domain}/privkey.pem@/fix-data/bin/nginx/conf/ssl/${domain}/${domain}.key@g" "/fix-data/bin/nginx/conf/vhost/${domain}.conf"
             echo "done."
 
             if crontab -l|grep -q "/bin/certbot renew"; then
@@ -179,12 +179,12 @@ if [ "${isSSL}" == "ssl" ]; then
             Echo_Yellow "Please enter domain(example: www.lnmp.org): "
             read domain
             if [ "${domain}" != "" ]; then
-                if [ ! -f "/usr/local/apache/conf/vhost/${domain}.conf" ]; then
+                if [ ! -f "/fix-data/bin/apache/conf/vhost/${domain}.conf" ]; then
                     Echo_Red "${domain} is not exist,please check!"
                     exit 1
                 else
                     echo " Your domain: ${domain}"
-                    if ! grep -q "/etc/letsencrypt/live/${domain}/privkey.pem" "/usr/local/apache/conf/vhost/${domain}.conf"; then
+                    if ! grep -q "/etc/letsencrypt/live/${domain}/privkey.pem" "/fix-data/bin/apache/conf/vhost/${domain}.conf"; then
                         Echo_Red "SSL configuration NOT found in the ${domain} config file!"
                         exit 1
                     fi
@@ -225,19 +225,19 @@ if [ "${isSSL}" == "ssl" ]; then
             letsdomain="-d ${domain}"
         fi
 
-        if [ -s /usr/local/acme.sh/acme.sh ]; then
-            echo "/usr/local/acme.sh/acme.sh [found]"
+        if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+            echo "/fix-data/bin/acme.sh/acme.sh [found]"
         else
             cd /tmp
             [[ -s latest.tar.gz ]] && rm -f latest.tar.gz
             wget https://soft.vpser.net/lib/acme.sh/latest.tar.gz --prefer-family=IPv4 --no-check-certificate
             tar zxf latest.tar.gz
             cd acme.sh-*
-            ./acme.sh --install --log --home /usr/local/acme.sh --certhome /usr/local/apache/conf/ssl
+            ./acme.sh --install --log --home /fix-data/bin/acme.sh --certhome /fix-data/bin/apache/conf/ssl
             cd ..
             rm -f latest.tar.gz
             rm -rf acme.sh-*
-            sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /usr/local/acme.sh/acme.sh
+            sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /fix-data/bin/acme.sh/acme.sh
             if command -v yum >/dev/null 2>&1; then
                 yum -y update nss
                 yum -y install ca-certificates
@@ -249,22 +249,22 @@ if [ "${isSSL}" == "ssl" ]; then
             fi
         fi
 
-        . "/usr/local/acme.sh/acme.sh.env"
+        . "/fix-data/bin/acme.sh/acme.sh.env"
 
-        if [ -s /usr/local/apache/conf/ssl/${domain}/fullchain.cer ]; then
+        if [ -s /fix-data/bin/apache/conf/ssl/${domain}/fullchain.cer ]; then
             echo "Removing exist domain certificate..."
-            rm -rf /usr/local/apache/conf/ssl/${domain}
+            rm -rf /fix-data/bin/apache/conf/ssl/${domain}
         fi
 
         echo "Starting create SSL Certificate use Let's Encrypt..."
-        /usr/local/acme.sh/acme.sh --issue ${letsdomain} -w ${vhostdir} --reloadcmd "/etc/init.d/httpd graceful"
+        /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} -w ${vhostdir} --reloadcmd "/etc/init.d/httpd graceful"
         lets_status=$?
         if [ "${lets_status}" = 0 ]; then
             Echo_Green "Let's Encrypt SSL Certificate create successfully."
             echo "Modify ${domain} configure..."
-            sed -i "s@/etc/letsencrypt/live/${domain}/fullchain.pem@/usr/local/apache/conf/ssl/${domain}/${domain}.cer@g" "/usr/local/apache/conf/vhost/${domain}.conf"
-            sed -i "s@/etc/letsencrypt/live/${domain}/privkey.pem@/usr/local/apache/conf/ssl/${domain}/${domain}.key@g" "/usr/local/apache/conf/vhost/${domain}.conf"
-            sed -i "/\/usr\/local\/apache\/conf\/ssl\/${domain}\/${domain}.key/a\SSLCertificateChainFile \/usr\/local\/apache\/conf\/ssl\/${domain}\/ca.cer" "/usr/local/apache/conf/vhost/${domain}.conf"
+            sed -i "s@/etc/letsencrypt/live/${domain}/fullchain.pem@/fix-data/bin/apache/conf/ssl/${domain}/${domain}.cer@g" "/fix-data/bin/apache/conf/vhost/${domain}.conf"
+            sed -i "s@/etc/letsencrypt/live/${domain}/privkey.pem@/fix-data/bin/apache/conf/ssl/${domain}/${domain}.key@g" "/fix-data/bin/apache/conf/vhost/${domain}.conf"
+            sed -i "/\/usr\/local\/apache\/conf\/ssl\/${domain}\/${domain}.key/a\SSLCertificateChainFile \/usr\/local\/apache\/conf\/ssl\/${domain}\/ca.cer" "/fix-data/bin/apache/conf/vhost/${domain}.conf"
             echo "done."
 
             if crontab -l|grep -q "/bin/certbot renew"; then
@@ -300,20 +300,20 @@ else
         chmod +x /bin/lnmp
         echo "Copy configure files..."
         sleep 1
-        if [ ! -s /usr/local/nginx/conf/enable-php.conf ]; then
-            \cp ${cur_dir}/conf/enable-php.conf /usr/local/nginx/conf/enable-php.conf
+        if [ ! -s /fix-data/bin/nginx/conf/enable-php.conf ]; then
+            \cp ${cur_dir}/conf/enable-php.conf /fix-data/bin/nginx/conf/enable-php.conf
         fi
-        if [ ! -s /usr/local/nginx/conf/pathinfo.conf ]; then
-            \cp ${cur_dir}/conf/pathinfo.conf /usr/local/nginx/conf/pathinfo.conf
+        if [ ! -s /fix-data/bin/nginx/conf/pathinfo.conf ]; then
+            \cp ${cur_dir}/conf/pathinfo.conf /fix-data/bin/nginx/conf/pathinfo.conf
         fi
-        if [ ! -s /usr/local/nginx/conf/enable-php-pathinfo.conf ]; then
-            \cp ${cur_dir}/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php-pathinfo.conf
+        if [ ! -s /fix-data/bin/nginx/conf/enable-php-pathinfo.conf ]; then
+            \cp ${cur_dir}/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php-pathinfo.conf
         fi
-        if [ ! -d /usr/local/nginx/conf/rewrite ]; then
-            \cp -ra ${cur_dir}/conf/rewrite /usr/local/nginx/conf/
+        if [ ! -d /fix-data/bin/nginx/conf/rewrite ]; then
+            \cp -ra ${cur_dir}/conf/rewrite /fix-data/bin/nginx/conf/
         fi
-        if [ ! -d /usr/local/nginx/conf/vhost ]; then
-            mkdir /usr/local/nginx/conf/vhost
+        if [ ! -d /fix-data/bin/nginx/conf/vhost ]; then
+            mkdir /fix-data/bin/nginx/conf/vhost
         fi
     elif [ "${Get_Stack}" == "lnmpa" ]; then
         Upgrade_Dependent
@@ -323,19 +323,19 @@ else
         chmod +x /bin/lnmp
         echo "Copy configure files..."
         sleep 1
-        \cp ${cur_dir}/conf/proxy.conf /usr/local/nginx/conf/proxy.conf
-        if [ ! -s /usr/local/nginx/conf/proxy-pass-php.conf ]; then
-            \cp ${cur_dir}/conf/proxy-pass-php.conf /usr/local/nginx/conf/proxy-pass-php.conf
+        \cp ${cur_dir}/conf/proxy.conf /fix-data/bin/nginx/conf/proxy.conf
+        if [ ! -s /fix-data/bin/nginx/conf/proxy-pass-php.conf ]; then
+            \cp ${cur_dir}/conf/proxy-pass-php.conf /fix-data/bin/nginx/conf/proxy-pass-php.conf
         fi
-        if ! grep -q "SetEnvIf X-Forwarded-Proto https HTTPS=on" /usr/local/apache/conf/httpd.conf; then
-            if /usr/local/apache/bin/httpd -v|grep -Eqi "Apache/2.2."; then
-                sed -i "/Include conf\/vhost\/\*.conf/i\SetEnvIf X-Forwarded-Proto https HTTPS=on\n" /usr/local/apache/conf/httpd.conf
-            elif /usr/local/apache/bin/httpd -v|grep -Eqi "Apache/2.4."; then
-                sed -i "/IncludeOptional conf\/vhost\/\*.conf/i\SetEnvIf X-Forwarded-Proto https HTTPS=on\n" /usr/local/apache/conf/httpd.conf
+        if ! grep -q "SetEnvIf X-Forwarded-Proto https HTTPS=on" /fix-data/bin/apache/conf/httpd.conf; then
+            if /fix-data/bin/apache/bin/httpd -v|grep -Eqi "Apache/2.2."; then
+                sed -i "/Include conf\/vhost\/\*.conf/i\SetEnvIf X-Forwarded-Proto https HTTPS=on\n" /fix-data/bin/apache/conf/httpd.conf
+            elif /fix-data/bin/apache/bin/httpd -v|grep -Eqi "Apache/2.4."; then
+                sed -i "/IncludeOptional conf\/vhost\/\*.conf/i\SetEnvIf X-Forwarded-Proto https HTTPS=on\n" /fix-data/bin/apache/conf/httpd.conf
             fi
         fi
-        if [ ! -d /usr/local/nginx/conf/vhost ]; then
-            mkdir /usr/local/nginx/conf/vhost
+        if [ ! -d /fix-data/bin/nginx/conf/vhost ]; then
+            mkdir /fix-data/bin/nginx/conf/vhost
         fi
     elif [ "${Get_Stack}" == "lamp" ]; then
         Upgrade_Dependent
@@ -345,15 +345,15 @@ else
         chmod +x /bin/lnmp
         echo "Copy configure files..."
         sleep 1
-        if /usr/local/apache/bin/httpd -v|grep -Eqi "Apache/2.2."; then
-            \cp ${cur_dir}/conf/httpd22-ssl.conf  /usr/local/apache/conf/extra/httpd-ssl.conf
-        elif /usr/local/apache/bin/httpd -v|grep -Eqi "Apache/2.4."; then
-            \cp ${cur_dir}/conf/httpd24-ssl.conf  /usr/local/apache/conf/extra/httpd-ssl.conf
-            sed -i 's/^#LoadModule socache_shmcb_module/LoadModule socache_shmcb_module/g' /usr/local/apache/conf/httpd.conf
-            sed -i 's/^LoadModule lbmethod_heartbeat_module/#LoadModule lbmethod_heartbeat_module/g' /usr/local/apache/conf/httpd.conf
+        if /fix-data/bin/apache/bin/httpd -v|grep -Eqi "Apache/2.2."; then
+            \cp ${cur_dir}/conf/httpd22-ssl.conf  /fix-data/bin/apache/conf/extra/httpd-ssl.conf
+        elif /fix-data/bin/apache/bin/httpd -v|grep -Eqi "Apache/2.4."; then
+            \cp ${cur_dir}/conf/httpd24-ssl.conf  /fix-data/bin/apache/conf/extra/httpd-ssl.conf
+            sed -i 's/^#LoadModule socache_shmcb_module/LoadModule socache_shmcb_module/g' /fix-data/bin/apache/conf/httpd.conf
+            sed -i 's/^LoadModule lbmethod_heartbeat_module/#LoadModule lbmethod_heartbeat_module/g' /fix-data/bin/apache/conf/httpd.conf
         fi
-        if [ ! -d /usr/local/apache/conf/vhost ]; then
-            mkdir /usr/local/apache/conf/vhost
+        if [ ! -d /fix-data/bin/apache/conf/vhost ]; then
+            mkdir /fix-data/bin/apache/conf/vhost
         fi
     fi
 
@@ -363,9 +363,9 @@ else
         sed -i 's#/etc/init.d/mysql.*##' /bin/lnmp
     fi
 
-    if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --upgrade
-        sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /usr/local/acme.sh/acme.sh
+    if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+        /fix-data/bin/acme.sh/acme.sh --upgrade
+        sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /fix-data/bin/acme.sh/acme.sh
     fi
 
     Echo_Green "upgrade lnmp manager complete."

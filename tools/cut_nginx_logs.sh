@@ -8,7 +8,7 @@ log_files_dir=${log_files_path}$(date -d "yesterday" +"%Y")/$(date -d "yesterday
 #set nginx log files you want to cut
 log_files_name=(access vpser licess)
 #set the path to nginx.
-nginx_sbin="/usr/local/nginx/sbin/nginx"
+nginx_sbin="/fix-data/bin/nginx/sbin/nginx"
 #Set how long you want to save
 save_days=30
 

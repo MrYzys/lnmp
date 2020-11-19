@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -67,7 +67,7 @@ if [ "${PM}" = "yum" ]; then
     sed -i 's#logpath  = /var/log/auth.log#logpath  = /var/log/secure#g' /etc/fail2ban/jail.local
     \cp files/redhat-initd /etc/init.d/fail2ban
 elif [ "${PM}" = "apt" ]; then
-    ln -sf /usr/local/bin/fail2ban-client /usr/bin/fail2ban-client
+    ln -sf /fix-data/bin/bin/fail2ban-client /usr/bin/fail2ban-client
     \cp files/debian-initd /etc/init.d/fail2ban
 fi
 \cp ../../init.d/fail2ban.service /etc/systemd/system/fail2ban.service

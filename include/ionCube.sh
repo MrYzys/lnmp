@@ -8,31 +8,31 @@ Install_ionCube()
     rm -f ${PHP_Path}/conf.d/001-ioncube.ini
     Addons_Get_PHP_Ext_Dir
     if echo "${Cur_PHP_Version}" | grep -Eqi '^5.2.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_5.2.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_5.2.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^5.3.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_5.3.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_5.3.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^5.4.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_5.4.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_5.4.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^5.5.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_5.5.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_5.5.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^5.6.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_5.6.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_5.6.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.0.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_7.0.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_7.0.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.1.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_7.1.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_7.1.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.2.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_7.2.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_7.2.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.3.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_7.3.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_7.3.so"
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.4.'; then
-       zend_ext="/usr/local/ioncube/ioncube_loader_lin_7.4.so"
+       zend_ext="/fix-data/bin/ioncube/ioncube_loader_lin_7.4.so"
     else
         Echo_Red "Do not support current PHP version or PHP error!"
         exit 1
     fi
 
-    rm -rf /usr/local/ioncube
+    rm -rf /fix-data/bin/ioncube
     cd ${cur_dir}/src
     rm -rf ioncube
     rm -rf ioncube_loaders_lin_x8*.tar.gz
@@ -53,7 +53,7 @@ Install_ionCube()
             tar zxf ioncube_loaders_lin_x86.tar.gz
         fi
     fi
-    mv ioncube /usr/local/
+    mv ioncube /fix-data/bin/
 
     echo "Writing ionCube Loader to configure files..."
     cat >${PHP_Path}/conf.d/001-ioncube.ini<<EOF
@@ -81,7 +81,7 @@ EOF
     Press_Start
     rm -f ${PHP_Path}/conf.d/001-ioncube.ini
     #echo "Delete ionCube files..."
-    #rm -rf /usr/local/ioncube/
+    #rm -rf /fix-data/bin/ioncube/
     Restart_PHP
     Echo_Green "Uninstall ionCube completed."
  }

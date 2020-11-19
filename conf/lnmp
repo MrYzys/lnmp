@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -13,7 +13,7 @@ echo "+-------------------------------------------+"
 echo "|              https://lnmp.org             |"
 echo "+-------------------------------------------+"
 
-PHPFPMPIDFILE=/usr/local/php/var/run/php-fpm.pid
+PHPFPMPIDFILE=/fix-data/bin/php/var/run/php-fpm.pid
 
 arg1=$1
 arg2=$2
@@ -160,15 +160,15 @@ Function_Ftp()
 
 Add_VHost_Config()
 {
-    if [ ! -f /usr/local/nginx/conf/rewrite/${rewrite}.conf ]; then
+    if [ ! -f /fix-data/bin/nginx/conf/rewrite/${rewrite}.conf ]; then
         echo "Create Virtul Host Rewrite file......"
-        touch /usr/local/nginx/conf/rewrite/${rewrite}.conf
-        echo "Create rewirte file successful,You can add rewrite rule into /usr/local/nginx/conf/rewrite/${rewrite}.conf."
+        touch /fix-data/bin/nginx/conf/rewrite/${rewrite}.conf
+        echo "Create rewirte file successful,You can add rewrite rule into /fix-data/bin/nginx/conf/rewrite/${rewrite}.conf."
     else
-        echo "You select the exist rewrite rule:/usr/local/nginx/conf/rewrite/${rewrite}.conf"
+        echo "You select the exist rewrite rule:/fix-data/bin/nginx/conf/rewrite/${rewrite}.conf"
     fi
 
-    cat >"/usr/local/nginx/conf/vhost/${domain}.conf"<<EOF
+    cat >"/fix-data/bin/nginx/conf/vhost/${domain}.conf"<<EOF
 server
     {
         listen 80;
@@ -209,14 +209,14 @@ server
 EOF
 
     echo "Test Nginx configure file......"
-    /usr/local/nginx/sbin/nginx -t
+    /fix-data/bin/nginx/sbin/nginx -t
     echo "Reload Nginx......"
-    /usr/local/nginx/sbin/nginx -s reload
+    /fix-data/bin/nginx/sbin/nginx -s reload
 }
 
 Multiple_PHP_Select()
 {
-    if [[ ! -s /usr/local/php5.2/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.2.conf ]] && [[ ! -s /usr/local/php5.3/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.3.conf ]] && [[ ! -s /usr/local/php5.4/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.4.conf ]] && [[ ! -s /usr/local/php5.5/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.5.conf ]] && [[ ! -s /usr/local/php5.6/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.6.conf ]] && [[ ! -s /usr/local/php7.0/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.0.conf ]] && [[ ! -s /usr/local/php7.1/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.1.conf ]] && [[ ! -s /usr/local/php7.2/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.2.conf ]] && [[ ! -s /usr/local/php7.3/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.3.conf ]] && [[ ! -s /usr/local/php7.4/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.4.conf ]]; then
+    if [[ ! -s /fix-data/bin/php5.2/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.2.conf ]] && [[ ! -s /fix-data/bin/php5.3/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.3.conf ]] && [[ ! -s /fix-data/bin/php5.4/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.4.conf ]] && [[ ! -s /fix-data/bin/php5.5/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.5.conf ]] && [[ ! -s /fix-data/bin/php5.6/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.6.conf ]] && [[ ! -s /fix-data/bin/php7.0/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.0.conf ]] && [[ ! -s /fix-data/bin/php7.1/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.1.conf ]] && [[ ! -s /fix-data/bin/php7.2/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.2.conf ]] && [[ ! -s /fix-data/bin/php7.3/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.3.conf ]] && [[ ! -s /fix-data/bin/php7.4/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.4.conf ]]; then
         if [ "${enable_pathinfo}" == "y" ]; then
             include_enable_php="include enable-php-pathinfo.conf;"
         else
@@ -224,36 +224,36 @@ Multiple_PHP_Select()
         fi
     else
         echo "Multiple PHP version found, Please select the PHP version."
-        Cur_PHP_Version="`/usr/local/php/bin/php-config --version`"
+        Cur_PHP_Version="`/fix-data/bin/php/bin/php-config --version`"
         Echo_Green "1: Default Main PHP ${Cur_PHP_Version}"
-        if [[ -s /usr/local/php5.2/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.2.conf && -s /etc/init.d/php-fpm5.2 ]]; then
+        if [[ -s /fix-data/bin/php5.2/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.2.conf && -s /etc/init.d/php-fpm5.2 ]]; then
             Echo_Green "2: PHP 5.2 [found]"
         fi
-        if [[ -s /usr/local/php5.3/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.3.conf && -s /etc/init.d/php-fpm5.3 ]]; then
+        if [[ -s /fix-data/bin/php5.3/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.3.conf && -s /etc/init.d/php-fpm5.3 ]]; then
             Echo_Green "3: PHP 5.3 [found]"
         fi
-        if [[ -s /usr/local/php5.4/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.4.conf && -s /etc/init.d/php-fpm5.4 ]]; then
+        if [[ -s /fix-data/bin/php5.4/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.4.conf && -s /etc/init.d/php-fpm5.4 ]]; then
             Echo_Green "4: PHP 5.4 [found]"
         fi
-        if [[ -s /usr/local/php5.5/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.5.conf && -s /etc/init.d/php-fpm5.5 ]]; then
+        if [[ -s /fix-data/bin/php5.5/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.5.conf && -s /etc/init.d/php-fpm5.5 ]]; then
             Echo_Green "5: PHP 5.5 [found]"
         fi
-        if [[ -s /usr/local/php5.6/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.6.conf && -s /etc/init.d/php-fpm5.6 ]]; then
+        if [[ -s /fix-data/bin/php5.6/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.6.conf && -s /etc/init.d/php-fpm5.6 ]]; then
             Echo_Green "6: PHP 5.6 [found]"
         fi
-        if [[ -s /usr/local/php7.0/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.0.conf && -s /etc/init.d/php-fpm7.0 ]]; then
+        if [[ -s /fix-data/bin/php7.0/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.0.conf && -s /etc/init.d/php-fpm7.0 ]]; then
             Echo_Green "7: PHP 7.0 [found]"
         fi
-        if [[ -s /usr/local/php7.1/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.1.conf && -s /etc/init.d/php-fpm7.1 ]]; then
+        if [[ -s /fix-data/bin/php7.1/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.1.conf && -s /etc/init.d/php-fpm7.1 ]]; then
             Echo_Green "8: PHP 7.1 [found]"
         fi
-        if [[ -s /usr/local/php7.2/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.2.conf && -s /etc/init.d/php-fpm7.2 ]]; then
+        if [[ -s /fix-data/bin/php7.2/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.2.conf && -s /etc/init.d/php-fpm7.2 ]]; then
             Echo_Green "9: PHP 7.2 [found]"
         fi
-        if [[ -s /usr/local/php7.3/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.3.conf && -s /etc/init.d/php-fpm7.3 ]]; then
+        if [[ -s /fix-data/bin/php7.3/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.3.conf && -s /etc/init.d/php-fpm7.3 ]]; then
             Echo_Green "10: PHP 7.3 [found]"
         fi
-        if [[ -s /usr/local/php7.4/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.4.conf && -s /etc/init.d/php-fpm7.4 ]]; then
+        if [[ -s /fix-data/bin/php7.4/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.4.conf && -s /etc/init.d/php-fpm7.4 ]]; then
             Echo_Green "11: PHP 7.4 [found]"
         fi
         Echo_Yellow "Enter your choice (1, 2, 3, 4, 5, 6, 7, 8, 9, 10 or 11): "
@@ -268,120 +268,120 @@ Multiple_PHP_Select()
                 fi
                 ;;
             2)
-                echo "Current selection: PHP `/usr/local/php5.2/bin/php-config --version`"
+                echo "Current selection: PHP `/fix-data/bin/php5.2/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php5.2-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php5.2-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php5.2-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi5.2.sock/g' /usr/local/nginx/conf/enable-php5.2-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php5.2-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php5.2-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi5.2.sock/g' /fix-data/bin/nginx/conf/enable-php5.2-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php5.2.conf;"
                 fi
                 ;;
             3)
-                echo "Current selection: PHP `/usr/local/php5.3/bin/php-config --version`"
+                echo "Current selection: PHP `/fix-data/bin/php5.3/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php5.3-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php5.3-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php5.3-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi5.3.sock/g' /usr/local/nginx/conf/enable-php5.3-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php5.3-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php5.3-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi5.3.sock/g' /fix-data/bin/nginx/conf/enable-php5.3-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php5.3.conf;"
                 fi
                 ;;
             4)
-                echo "Current selection: PHP `/usr/local/php5.4/bin/php-config --version`"
+                echo "Current selection: PHP `/fix-data/bin/php5.4/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php5.4-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php5.4-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php5.4-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi5.4.sock/g' /usr/local/nginx/conf/enable-php5.4-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php5.4-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php5.4-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi5.4.sock/g' /fix-data/bin/nginx/conf/enable-php5.4-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php5.4.conf;"
                 fi
                 ;;
             5)
-                echo "Current selection: PHP `/usr/local/php5.5/bin/php-config --version`"
+                echo "Current selection: PHP `/fix-data/bin/php5.5/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php5.5-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php5.5-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php5.5-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi5.5.sock/g' /usr/local/nginx/conf/enable-php5.5-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php5.5-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php5.5-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi5.5.sock/g' /fix-data/bin/nginx/conf/enable-php5.5-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php5.5.conf;"
                 fi
                 ;;
             6)
-                echo "Current selection: PHP `/usr/local/php5.6/bin/php-config --version`"
+                echo "Current selection: PHP `/fix-data/bin/php5.6/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php5.6-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php5.6-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php5.6-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi5.6.sock/g' /usr/local/nginx/conf/enable-php5.6-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php5.6-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php5.6-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi5.6.sock/g' /fix-data/bin/nginx/conf/enable-php5.6-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php5.6.conf;"
                 fi
                 ;;
             7)
-                echo "Current selection:: PHP `/usr/local/php7.0/bin/php-config --version`"
+                echo "Current selection:: PHP `/fix-data/bin/php7.0/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php7.0-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php7.0-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php7.0-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi7.0.sock/g' /usr/local/nginx/conf/enable-php7.0-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php7.0-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php7.0-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi7.0.sock/g' /fix-data/bin/nginx/conf/enable-php7.0-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php7.0.conf;"
                 fi
                 ;;
             8)
-                echo "Current selection:: PHP `/usr/local/php7.1/bin/php-config --version`"
+                echo "Current selection:: PHP `/fix-data/bin/php7.1/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php7.1-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php7.1-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php7.1-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi7.1.sock/g' /usr/local/nginx/conf/enable-php7.1-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php7.1-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php7.1-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi7.1.sock/g' /fix-data/bin/nginx/conf/enable-php7.1-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php7.1.conf;"
                 fi
                 ;;
             9)
-                echo "Current selection:: PHP `/usr/local/php7.2/bin/php-config --version`"
+                echo "Current selection:: PHP `/fix-data/bin/php7.2/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php7.2-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php7.2-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php7.2-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi7.2.sock/g' /usr/local/nginx/conf/enable-php7.2-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php7.2-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php7.2-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi7.2.sock/g' /fix-data/bin/nginx/conf/enable-php7.2-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php7.2.conf;"
                 fi
                 ;;
             10)
-                echo "Current selection:: PHP `/usr/local/php7.3/bin/php-config --version`"
+                echo "Current selection:: PHP `/fix-data/bin/php7.3/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php7.3-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php7.3-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php7.3-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi7.3.sock/g' /usr/local/nginx/conf/enable-php7.3-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php7.3-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php7.3-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi7.3.sock/g' /fix-data/bin/nginx/conf/enable-php7.3-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php7.3.conf;"
                 fi
                 ;;
             11)
-                echo "Current selection:: PHP `/usr/local/php7.4/bin/php-config --version`"
+                echo "Current selection:: PHP `/fix-data/bin/php7.4/bin/php-config --version`"
                 if [ "${enable_pathinfo}" == "y" ]; then
                     include_enable_php="include enable-php7.4-pathinfo.conf;"
-                    if [ ! -s /usr/local/nginx/conf/enable-php7.4-pathinfo.conf ]; then
-                        \cp /usr/local/nginx/conf/enable-php-pathinfo.conf /usr/local/nginx/conf/enable-php7.4-pathinfo.conf
-                        sed -i 's/php-cgi.sock/php-cgi7.4.sock/g' /usr/local/nginx/conf/enable-php7.4-pathinfo.conf
+                    if [ ! -s /fix-data/bin/nginx/conf/enable-php7.4-pathinfo.conf ]; then
+                        \cp /fix-data/bin/nginx/conf/enable-php-pathinfo.conf /fix-data/bin/nginx/conf/enable-php7.4-pathinfo.conf
+                        sed -i 's/php-cgi.sock/php-cgi7.4.sock/g' /fix-data/bin/nginx/conf/enable-php7.4-pathinfo.conf
                     fi
                 else
                     include_enable_php="include enable-php7.4.conf;"
@@ -407,7 +407,7 @@ Add_VHost()
         Echo_Yellow "Please enter domain(example: www.lnmp.org): "
         read domain
         if [ "${domain}" != "" ]; then
-            if [ -f "/usr/local/nginx/conf/vhost/${domain}.conf" ]; then
+            if [ -f "/fix-data/bin/nginx/conf/vhost/${domain}.conf" ]; then
                 Echo_Red " ${domain} is exist,please check!"
                 exit 1
             else
@@ -477,7 +477,7 @@ Add_VHost()
 
     Multiple_PHP_Select
 
-    if [[ -s /usr/local/mysql/bin/mysql || -s /usr/local/mariadb/bin/mysql ]]; then
+    if [[ -s /fix-data/bin/mysql/bin/mysql || -s /fix-data/bin/mariadb/bin/mysql ]]; then
         Echo_Yellow "Create database and MySQL user with same name (y/n) "
         read create_database
 
@@ -487,7 +487,7 @@ Add_VHost()
         fi
     fi
 
-    if [ -s /usr/local/pureftpd/sbin/pure-ftpd ]; then
+    if [ -s /fix-data/bin/pureftpd/sbin/pure-ftpd ]; then
         Echo_Yellow "Create ftp account (y/n) "
         read create_ftp
 
@@ -577,7 +577,7 @@ EOF
 List_VHost()
 {
     echo "Nginx Virtualhost list:"
-    ls /usr/local/nginx/conf/vhost/ | grep ".conf$" | sed 's/.conf//g'
+    ls /fix-data/bin/nginx/conf/vhost/ | grep ".conf$" | sed 's/.conf//g'
 }
 
 Del_VHost()
@@ -596,7 +596,7 @@ Del_VHost()
             break
         fi
     done
-    if [ ! -f "/usr/local/nginx/conf/vhost/${domain}.conf" ]; then
+    if [ ! -f "/fix-data/bin/nginx/conf/vhost/${domain}.conf" ]; then
         echo "=========================================="
         echo "Domain: ${domain} was not exist!"
         echo "=========================================="
@@ -606,7 +606,7 @@ Del_VHost()
             chattr -i "${vhostdir}/.user.ini"
             rm -f "${vhostdir}/.user.ini"
         fi
-        rm -f /usr/local/nginx/conf/vhost/${domain}.conf
+        rm -f /fix-data/bin/nginx/conf/vhost/${domain}.conf
         echo "========================================================"
         echo "Domain: ${domain} has been deleted."
         echo "Website files will not be deleted for security reasons."
@@ -617,12 +617,12 @@ Del_VHost()
 
 Check_DB()
 {
-    if [[ -s /usr/local/mariadb/bin/mysql && -s /usr/local/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
-        MySQL_Bin="/usr/local/mariadb/bin/mysql"
-        MySQL_Ver=`/usr/local/mariadb/bin/mysql_config --version`
-    elif [[ -s /usr/local/mysql/bin/mysql && -s /usr/local/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
-        MySQL_Bin="/usr/local/mysql/bin/mysql"
-        MySQL_Ver=`/usr/local/mysql/bin/mysql_config --version`
+    if [[ -s /fix-data/bin/mariadb/bin/mysql && -s /fix-data/bin/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+        MySQL_Bin="/fix-data/bin/mariadb/bin/mysql"
+        MySQL_Ver=`/fix-data/bin/mariadb/bin/mysql_config --version`
+    elif [[ -s /fix-data/bin/mysql/bin/mysql && -s /fix-data/bin/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+        MySQL_Bin="/fix-data/bin/mysql/bin/mysql"
+        MySQL_Ver=`/fix-data/bin/mysql/bin/mysql_config --version`
     else
         MySQL_Bin="None"
     fi
@@ -827,7 +827,7 @@ Add_Ftp_Menu()
 
 Check_Pureftpd()
 {
-    if [ ! -f /usr/local/pureftpd/sbin/pure-ftpd ]; then
+    if [ ! -f /fix-data/bin/pureftpd/sbin/pure-ftpd ]; then
         Echo_Red "Pureftpd was not installed!"
         exit 1
     fi
@@ -841,14 +841,14 @@ Add_Ftp()
 ${ftp_account_password}
 ${ftp_account_password}
 EOF
-    /usr/local/pureftpd/bin/pure-pw useradd ${ftp_account_name} -f /usr/local/pureftpd/etc/pureftpd.passwd -u ${www_uid} -g ${www_gid} -d ${vhostdir} -m < /tmp/pass${ftp_account_name}
+    /fix-data/bin/pureftpd/bin/pure-pw useradd ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -u ${www_uid} -g ${www_gid} -d ${vhostdir} -m < /tmp/pass${ftp_account_name}
     [ $? -eq 0 ] && echo "Created FTP User: ${ftp_account_name} Sucessfully." || echo "FTP User: ${ftp_account_name} already exists!"
     rm -f /tmp/pass${ftp_account_name}
 }
 
 List_Ftp()
 {
-    /usr/local/pureftpd/bin/pure-pw list -f /usr/local/pureftpd/etc/pureftpd.passwd
+    /fix-data/bin/pureftpd/bin/pure-pw list -f /fix-data/bin/pureftpd/etc/pureftpd.passwd
     [ $? -eq 0 ] && echo "List FTP User Sucessfully." || echo "Read database failed."
 }
 
@@ -863,7 +863,7 @@ Edit_Ftp()
 ${ftp_account_password}
 ${ftp_account_password}
 EOF
-        /usr/local/pureftpd/bin/pure-pw passwd ${ftp_account_name} -f /usr/local/pureftpd/etc/pureftpd.passwd -m < /tmp/pass${ftp_account_name}
+        /fix-data/bin/pureftpd/bin/pure-pw passwd ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -m < /tmp/pass${ftp_account_name}
         [ $? -eq 0 ] && echo "FTP User: ${ftp_account_name} change password Sucessfully." || echo "FTP User: ${ftp_account_name} change password failed!"
         rm -f /tmp/pass${ftp_account_name}
     else
@@ -874,7 +874,7 @@ EOF
     if [ "${vhostdir}" != "" ]; then
         www_uid=`id -u www`
         www_gid=`id -g www`
-        /usr/local/pureftpd/bin/pure-pw usermod ${ftp_account_name} -f /usr/local/pureftpd/etc/pureftpd.passwd -u ${www_uid} -g ${www_gid} -d ${vhostdir} -m
+        /fix-data/bin/pureftpd/bin/pure-pw usermod ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -u ${www_uid} -g ${www_gid} -d ${vhostdir} -m
         [ $? -eq 0 ] && echo "FTP User: ${ftp_account_name} change diretcory Sucessfully." || echo "FTP User: ${ftp_account_name} change directory failed!"
     else
         echo "Directory will not change."
@@ -888,7 +888,7 @@ Del_Ftp()
     echo "Your will delete ftp user ${ftp_account_name}"
     echo "Sleep 3s,Press ctrl+c to cancel..."
     Sleep_Sec 3
-    /usr/local/pureftpd/bin/pure-pw userdel ${ftp_account_name} -f /usr/local/pureftpd/etc/pureftpd.passwd -m
+    /fix-data/bin/pureftpd/bin/pure-pw userdel ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -m
     [ $? -eq 0 ] && echo "FTP User: ${ftp_account_name} deleted Sucessfully." || echo "FTP User: ${ftp_account_name} not exists!"
 }
 
@@ -897,7 +897,7 @@ Show_Ftp()
     List_Ftp
     Enter_Ftp_Name
     echo "Your ftp account ${ftp_account_name} details:"
-    /usr/local/pureftpd/bin/pure-pw show ${ftp_account_name}
+    /fix-data/bin/pureftpd/bin/pure-pw show ${ftp_account_name}
     [ $? -eq 0 ] && echo "Ok." || echo "failed."
 }
 
@@ -1037,33 +1037,33 @@ Add_SSL_Menu()
 
 Install_Check_Acme.sh()
 {
-    if [ -s /usr/local/acme.sh/acme.sh ]; then
-        echo "/usr/local/acme.sh/acme.sh [found]"
+    if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+        echo "/fix-data/bin/acme.sh/acme.sh [found]"
     else
         cd /tmp
         [[ -f latest.tar.gz ]] && rm -f latest.tar.gz
         wget https://soft.vpser.net/lib/acme.sh/latest.tar.gz --prefer-family=IPv4 --no-check-certificate
         tar zxf latest.tar.gz
         cd acme.sh-*
-        ./acme.sh --install --log --home /usr/local/acme.sh --certhome /usr/local/nginx/conf/ssl
+        ./acme.sh --install --log --home /fix-data/bin/acme.sh --certhome /fix-data/bin/nginx/conf/ssl
         cd ..
         rm -f latest.tar.gz
         rm -rf acme.sh-*
-        sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /usr/local/acme.sh/acme.sh
-        cat >/usr/local/acme.sh/upgrade.sh<<EOF
+        sed -i 's/cat "\$CERT_PATH"$/#cat "\$CERT_PATH"/g' /fix-data/bin/acme.sh/acme.sh
+        cat >/fix-data/bin/acme.sh/upgrade.sh<<EOF
 #!/bin/bash
 
-. "/usr/local/acme.sh/acme.sh.env"
-/usr/local/acme.sh/acme.sh --upgrade
-sed -i 's/cat "\\\$CERT_PATH"\$/#cat "\\\$CERT_PATH"/g' /usr/local/acme.sh/acme.sh
+. "/fix-data/bin/acme.sh/acme.sh.env"
+/fix-data/bin/acme.sh/acme.sh --upgrade
+sed -i 's/cat "\\\$CERT_PATH"\$/#cat "\\\$CERT_PATH"/g' /fix-data/bin/acme.sh/acme.sh
 EOF
 
-        chmod +x /usr/local/acme.sh/upgrade.sh
-        if crontab -l|grep -q "/usr/local/acme.sh/upgrade.sh"; then
+        chmod +x /fix-data/bin/acme.sh/upgrade.sh
+        if crontab -l|grep -q "/fix-data/bin/acme.sh/upgrade.sh"; then
             echo "acme.sh upgrade crontab rule is exist."
         else
             echo "Add acme.sh upgrade crontab rule..."
-            (crontab -l ; echo '0 3 */7 * * /usr/local/acme.sh/upgrade.sh') | crontab -
+            (crontab -l ; echo '0 3 */7 * * /fix-data/bin/acme.sh/upgrade.sh') | crontab -
         fi
         if command -v yum >/dev/null 2>&1; then
             yum -y update nss
@@ -1076,7 +1076,7 @@ EOF
         fi
     fi
 
-    . "/usr/local/acme.sh/acme.sh.env"
+    . "/fix-data/bin/acme.sh/acme.sh.env"
 }
 
 Add_Letsencrypt()
@@ -1092,13 +1092,13 @@ Add_Letsencrypt()
 
     Install_Check_Acme.sh
 
-    if [ -s /usr/local/nginx/conf/ssl/${domain}/fullchain.cer ]; then
+    if [ -s /fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer ]; then
         echo "Removing exist domain certificate..."
-        rm -rf /usr/local/nginx/conf/ssl/${domain}
+        rm -rf /fix-data/bin/nginx/conf/ssl/${domain}
     fi
 
     echo "Starting create SSL Certificate use Let's Encrypt..."
-    /usr/local/acme.sh/acme.sh --issue ${letsdomain} -w ${vhostdir} --reloadcmd "/etc/init.d/nginx reload"
+    /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} -w ${vhostdir} --reloadcmd "/etc/init.d/nginx reload"
     lets_status=$?
     if [ "${lets_status}" = 0 ]; then
         Echo_Green "Let's Encrypt SSL Certificate create successfully."
@@ -1109,13 +1109,13 @@ Add_Letsencrypt()
 
 Create_SSL_Config()
 {
-    if [ ! -s /usr/local/nginx/conf/ssl/dhparam.pem ]; then
+    if [ ! -s /fix-data/bin/nginx/conf/ssl/dhparam.pem ]; then
         echo "Create dhparam.pem..."
-        mkdir -p /usr/local/nginx/conf/ssl/
-        openssl dhparam -out /usr/local/nginx/conf/ssl/dhparam.pem 2048
+        mkdir -p /fix-data/bin/nginx/conf/ssl/
+        openssl dhparam -out /fix-data/bin/nginx/conf/ssl/dhparam.pem 2048
     fi
 
-    cat >>"/usr/local/nginx/conf/vhost/${domain}.conf"<<EOF
+    cat >>"/fix-data/bin/nginx/conf/vhost/${domain}.conf"<<EOF
 
 server
     {
@@ -1132,8 +1132,8 @@ server
         ssl_prefer_server_ciphers on;
         ssl_ciphers "TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256:EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5";
         ssl_session_cache builtin:1000 shared:SSL:10m;
-        # openssl dhparam -out /usr/local/nginx/conf/ssl/dhparam.pem 2048
-        ssl_dhparam /usr/local/nginx/conf/ssl/dhparam.pem;
+        # openssl dhparam -out /fix-data/bin/nginx/conf/ssl/dhparam.pem 2048
+        ssl_dhparam /fix-data/bin/nginx/conf/ssl/dhparam.pem;
 
         include rewrite/${rewrite}.conf;
         #error_page   404   /404.html;
@@ -1167,9 +1167,9 @@ server
 EOF
 
     echo "Test Nginx configure file......"
-    /usr/local/nginx/sbin/nginx -t
+    /fix-data/bin/nginx/sbin/nginx -t
     echo "Reload Nginx......"
-    /usr/local/nginx/sbin/nginx -s reload
+    /fix-data/bin/nginx/sbin/nginx -s reload
 }
 
 Add_SSL()
@@ -1186,15 +1186,15 @@ Add_SSL()
         else
             letsdomain="-d ${domain}"
         fi
-        if [ ! -s "/usr/local/nginx/conf/vhost/${domain}.conf" ]; then
+        if [ ! -s "/fix-data/bin/nginx/conf/vhost/${domain}.conf" ]; then
             Add_VHost_Config
         fi
         if [ ! -d "${vhostdir}" ]; then
             mkdir -p "${vhostdir}"
         fi
         Add_Letsencrypt
-        ssl_certificate="/usr/local/nginx/conf/ssl/${domain}/fullchain.cer"
-        ssl_certificate_key="/usr/local/nginx/conf/ssl/${domain}/${domain}.key"
+        ssl_certificate="/fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer"
+        ssl_certificate_key="/fix-data/bin/nginx/conf/ssl/${domain}/${domain}.key"
         if [ "${lets_status}" = 0 ]; then
             Create_SSL_Config
         fi
@@ -1212,15 +1212,15 @@ Add_Dns_SSL()
 
     Install_Check_Acme.sh
 
-    if [[ ! -s /usr/local/acme.sh/dnsapi/dns_${provider}.sh && "${provider}" != "" ]]; then
+    if [[ ! -s /fix-data/bin/acme.sh/dnsapi/dns_${provider}.sh && "${provider}" != "" ]]; then
         echo "DNS Provider: ${provider} not found."
         exit 1
     fi
     Add_SSL_Info_Menu
 
-    if [ -s /usr/local/nginx/conf/ssl/${domain}/fullchain.cer ]; then
+    if [ -s /fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer ]; then
         echo "Removing exist domain certificate..."
-        rm -rf /usr/local/nginx/conf/ssl/${domain}
+        rm -rf /fix-data/bin/nginx/conf/ssl/${domain}
     fi
 
     letsdomain=""
@@ -1240,17 +1240,17 @@ Add_Dns_SSL()
 
     echo "Starting create SSL Certificate use Let's Encrypt..."
     if [ "${provider}" != "" ]; then
-        /usr/local/acme.sh/acme.sh --issue ${letsdomain} --dns ${dns_provider} --reloadcmd "/etc/init.d/nginx reload"
+        /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} --dns ${dns_provider} --reloadcmd "/etc/init.d/nginx reload"
         lets_status=$?
     else
-        /usr/local/acme.sh/acme.sh --issue ${letsdomain} --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please
+        /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please
         Echo_Yellow "Please add the above TXT record to the domain in 120 seconds!!!"
         echo
         Sleep_Sec 120
-        /usr/local/acme.sh/acme.sh --renew ${letsdomain} --yes-I-know-dns-manual-mode-enough-go-ahead-please
+        /fix-data/bin/acme.sh/acme.sh --renew ${letsdomain} --yes-I-know-dns-manual-mode-enough-go-ahead-please
         lets_status=$?
     fi
-    if [ "${lets_status}" = 0 ] || [[ "${provider}" = "" && "${lets_status}" = 1 && -s "/usr/local/nginx/conf/ssl/${domain}/fullchain.cer" ]]; then
+    if [ "${lets_status}" = 0 ] || [[ "${provider}" = "" && "${lets_status}" = 1 && -s "/fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer" ]]; then
         if [ ! -d "${vhostdir}" ]; then
             echo "Create Virtul Host directory......"
             mkdir -p ${vhostdir}
@@ -1259,11 +1259,11 @@ Add_Dns_SSL()
             chown -R www:www ${vhostdir}
         fi
 
-        if [ ! -s "/usr/local/nginx/conf/vhost/${domain}.conf" ]; then
+        if [ ! -s "/fix-data/bin/nginx/conf/vhost/${domain}.conf" ]; then
             Add_VHost_Config
         fi
-        ssl_certificate="/usr/local/nginx/conf/ssl/${domain}/fullchain.cer"
-        ssl_certificate_key="/usr/local/nginx/conf/ssl/${domain}/${domain}.key"
+        ssl_certificate="/fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer"
+        ssl_certificate_key="/fix-data/bin/nginx/conf/ssl/${domain}/${domain}.key"
         Create_SSL_Config
         Echo_Green "Let's Encrypt SSL Certificate create successfully."
     else
@@ -1282,16 +1282,16 @@ Add_Dns_SSL_Only()
 
     Install_Check_Acme.sh
 
-    if [[ ! -s /usr/local/acme.sh/dnsapi/dns_${provider}.sh && "${provider}" != "" ]]; then
+    if [[ ! -s /fix-data/bin/acme.sh/dnsapi/dns_${provider}.sh && "${provider}" != "" ]]; then
         echo "DNS Provider: ${provider} not found."
         exit 1
     fi
 
     Add_DNS_SSL_Only_Info_Menu
 
-    if [ -s /usr/local/nginx/conf/ssl/${domain}/fullchain.cer ]; then
+    if [ -s /fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer ]; then
         echo "Removing exist domain certificate..."
-        rm -rf /usr/local/nginx/conf/ssl/${domain}
+        rm -rf /fix-data/bin/nginx/conf/ssl/${domain}
     fi
 
     letsdomain=""
@@ -1311,21 +1311,21 @@ Add_Dns_SSL_Only()
 
     echo "Starting create SSL Certificate use Let's Encrypt..."
     if [ "${provider}" != "" ]; then
-        /usr/local/acme.sh/acme.sh --issue ${letsdomain} --dns ${dns_provider} --reloadcmd "/etc/init.d/nginx reload"
+        /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} --dns ${dns_provider} --reloadcmd "/etc/init.d/nginx reload"
         lets_status=$?
     else
-        /usr/local/acme.sh/acme.sh --issue ${letsdomain} --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please
+        /fix-data/bin/acme.sh/acme.sh --issue ${letsdomain} --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please
         Echo_Yellow "Please add the above TXT record to the domain in 120 seconds!!!"
         echo
         Sleep_Sec 120
-        /usr/local/acme.sh/acme.sh --renew ${letsdomain} --yes-I-know-dns-manual-mode-enough-go-ahead-please
+        /fix-data/bin/acme.sh/acme.sh --renew ${letsdomain} --yes-I-know-dns-manual-mode-enough-go-ahead-please
         lets_status=$?
     fi
-    if [ "${lets_status}" = 0 ] || [[ "${provider}" = "" && "${lets_status}" = 1 && -s "/usr/local/nginx/conf/ssl/${domain}/fullchain.cer" ]]; then
+    if [ "${lets_status}" = 0 ] || [[ "${provider}" = "" && "${lets_status}" = 1 && -s "/fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer" ]]; then
         Echo_Blue "------------------ SSL Certificate information as follows ------------------"
         Echo_Blue "| Domain: ${domain} ${moredomain}"
-        Echo_Blue "| SSL Certificate: /usr/local/nginx/conf/ssl/${domain}/fullchain.cer"
-        Echo_Blue "| SSL Certificate Key: /usr/local/nginx/conf/ssl/${domain}/${domain}.key"
+        Echo_Blue "| SSL Certificate: /fix-data/bin/nginx/conf/ssl/${domain}/fullchain.cer"
+        Echo_Blue "| SSL Certificate Key: /fix-data/bin/nginx/conf/ssl/${domain}/${domain}.key"
         Echo_Blue "------------------------------------ ---------------------------------------"
         Echo_Green "Let's Encrypt SSL Certificate create successfully."
     else

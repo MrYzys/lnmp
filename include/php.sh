@@ -2,18 +2,18 @@
 
 Export_PHP_Autoconf()
 {
-    if [[ -s /usr/local/autoconf-2.13/bin/autoconf && -s /usr/local/autoconf-2.13/bin/autoheader ]]; then
+    if [[ -s /fix-data/bin/autoconf-2.13/bin/autoconf && -s /fix-data/bin/autoconf-2.13/bin/autoheader ]]; then
         Echo_Green "Autconf 2.13...ok"
     else
         Install_Autoconf
     fi
-    export PHP_AUTOCONF=/usr/local/autoconf-2.13/bin/autoconf
-    export PHP_AUTOHEADER=/usr/local/autoconf-2.13/bin/autoheader
+    export PHP_AUTOCONF=/fix-data/bin/autoconf-2.13/bin/autoconf
+    export PHP_AUTOHEADER=/fix-data/bin/autoconf-2.13/bin/autoheader
 }
 
 Check_Curl()
 {
-    if [ -s /usr/local/curl/bin/curl ]; then
+    if [ -s /fix-data/bin/curl/bin/curl ]; then
         Echo_Green "Curl ...ok"
     else
         Install_Curl
@@ -25,7 +25,7 @@ PHP_with_curl()
     Get_ARM
     if [[ "${DISTRO}" = "CentOS" && "${Is_ARM}" = "y" ]] || [ "${UseOldOpenssl}" = "y" ];then
         Check_Curl
-        with_curl='--with-curl=/usr/local/curl'
+        with_curl='--with-curl=/fix-data/bin/curl'
     else
         with_curl='--with-curl'
     fi
@@ -43,7 +43,7 @@ PHP_with_openssl()
     fi
     if [ "${UseOldOpenssl}" = "y" ]; then
             Install_Openssl
-            with_openssl='--with-openssl=/usr/local/openssl'
+            with_openssl='--with-openssl=/fix-data/bin/openssl'
     else
         with_openssl='--with-openssl'
     fi
@@ -71,32 +71,32 @@ Check_PHP_Option()
 
 Ln_PHP_Bin()
 {
-    ln -sf /usr/local/php/bin/php /usr/bin/php
-    ln -sf /usr/local/php/bin/phpize /usr/bin/phpize
-    ln -sf /usr/local/php/bin/pear /usr/bin/pear
-    ln -sf /usr/local/php/bin/pecl /usr/bin/pecl
+    ln -sf /fix-data/bin/php/bin/php /usr/bin/php
+    ln -sf /fix-data/bin/php/bin/phpize /usr/bin/phpize
+    ln -sf /fix-data/bin/php/bin/pear /usr/bin/pear
+    ln -sf /fix-data/bin/php/bin/pecl /usr/bin/pecl
     if [ "${Stack}" = "lnmp" ]; then
-        ln -sf /usr/local/php/sbin/php-fpm /usr/bin/php-fpm
+        ln -sf /fix-data/bin/php/sbin/php-fpm /usr/bin/php-fpm
     fi
-    rm -f /usr/local/php/conf.d/*
+    rm -f /fix-data/bin/php/conf.d/*
 }
 
 Pear_Pecl_Set()
 {
-    pear config-set php_ini /usr/local/php/etc/php.ini
-    pecl config-set php_ini /usr/local/php/etc/php.ini
+    pear config-set php_ini /fix-data/bin/php/etc/php.ini
+    pecl config-set php_ini /fix-data/bin/php/etc/php.ini
 }
 
 Install_Composer()
 {
     echo "Downloading Composer..."
-    wget --prefer-family=IPv4 --no-check-certificate -T 120 -t3 ${Download_Mirror}/web/php/composer/composer.phar -O /usr/local/bin/composer
+    wget --prefer-family=IPv4 --no-check-certificate -T 120 -t3 ${Download_Mirror}/web/php/composer/composer.phar -O /fix-data/bin/bin/composer
     if [ $? -eq 0 ]; then
         echo "Composer install successfully."
-        chmod +x /usr/local/bin/composer
+        chmod +x /fix-data/bin/bin/composer
     else
         echo "Composer install failed, try to from composer official website..."
-        curl -sS --connect-timeout 30 -m 60 https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+        curl -sS --connect-timeout 30 -m 60 https://getcomposer.org/installer | php -- --install-dir=/fix-data/bin/bin --filename=composer
         if [ $? -eq 0 ]; then
             echo "Composer install successfully."
         fi
@@ -123,54 +123,54 @@ Install_PHP_52()
     patch -p1 < ${cur_dir}/src/patch/php-5.2-multipart-form-data.patch
     ./buildconf --force
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-mysql=${MySQL_Dir} --with-mysqli=${MySQL_Config} --with-pdo-mysql=${MySQL_Dir} --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-fastcgi --enable-fpm --enable-force-cgi-redirect --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --with-mime-magic ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-mysql=${MySQL_Dir} --with-mysqli=${MySQL_Config} --with-pdo-mysql=${MySQL_Dir} --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-fastcgi --enable-fpm --enable-force-cgi-redirect --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --with-mime-magic ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysql=${MySQL_Dir} --with-mysqli=${MySQL_Config} --with-pdo-mysql=${MySQL_Dir} --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --with-mime-magic ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=${MySQL_Dir} --with-mysqli=${MySQL_Config} --with-pdo-mysql=${MySQL_Dir} --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --with-mime-magic ${PHP_Modules_Options}
     fi
     PHP_Make_Install
 
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-dist /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-dist /fix-data/bin/php/etc/php.ini
     cd ../
 
     Ln_PHP_Bin
 
     # php extensions
-    sed -i 's#extension_dir = "./"#extension_dir = "/usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/"\n#' /usr/local/php/etc/php.ini
-    sed -i 's#output_buffering =.*#output_buffering = On#' /usr/local/php/etc/php.ini
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/; cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket/g' /usr/local/php/etc/php.ini
+    sed -i 's#extension_dir = "./"#extension_dir = "/fix-data/bin/php/lib/php/extensions/no-debug-non-zts-20060613/"\n#' /fix-data/bin/php/etc/php.ini
+    sed -i 's#output_buffering =.*#output_buffering = On#' /fix-data/bin/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/; cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
 
     cd ${cur_dir}/src
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/ZendOptimizer-3.3.9-linux-glibc23-x86_64.tar.gz
         tar zxf ZendOptimizer-3.3.9-linux-glibc23-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendOptimizer-3.3.9-linux-glibc23-x86_64/data/5_2_x_comp/ZendOptimizer.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendOptimizer-3.3.9-linux-glibc23-x86_64/data/5_2_x_comp/ZendOptimizer.so /fix-data/bin/zend/
     else
         Download_Files ${Download_Mirror}/web/zend/ZendOptimizer-3.3.9-linux-glibc23-i386.tar.gz
         tar zxf ZendOptimizer-3.3.9-linux-glibc23-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendOptimizer-3.3.9-linux-glibc23-i386/data/5_2_x_comp/ZendOptimizer.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendOptimizer-3.3.9-linux-glibc23-i386/data/5_2_x_comp/ZendOptimizer.so /fix-data/bin/zend/
     fi
 
     if [ "${Is_ARM}" != "y" ]; then
-        cat >/usr/local/php/conf.d/002-zendoptimizer.ini<<EOF
+        cat >/fix-data/bin/php/conf.d/002-zendoptimizer.ini<<EOF
 [Zend Optimizer]
 zend_optimizer.optimization_level=1
-zend_extension="/usr/local/zend/ZendOptimizer.so"
+zend_extension="/fix-data/bin/zend/ZendOptimizer.so"
 EOF
     fi
 
     if [ "${Stack}" = "lnmp" ]; then
-        rm -f /usr/local/php/etc/php-fpm.conf
-        \cp ${cur_dir}/conf/php-fpm5.2.conf /usr/local/php/etc/php-fpm.conf
+        rm -f /fix-data/bin/php/etc/php-fpm.conf
+        \cp ${cur_dir}/conf/php-fpm5.2.conf /fix-data/bin/php/etc/php-fpm.conf
         \cp ${cur_dir}/init.d/init.d.php-fpm5.2 /etc/init.d/php-fpm
         chmod +x /etc/init.d/php-fpm
     fi
@@ -183,9 +183,9 @@ Install_PHP_53()
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     patch -p1 < ${cur_dir}/src/patch/php-5.3-multipart-form-data.patch
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -193,21 +193,21 @@ Install_PHP_53()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/register_long_arrays =.*/;register_long_arrays = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/magic_quotes_gpc =.*/;magic_quotes_gpc = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/register_long_arrays =.*/;register_long_arrays = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/magic_quotes_gpc =.*/;magic_quotes_gpc = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -216,37 +216,37 @@ Install_PHP_53()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-php-5.3-linux-glibc23-x86_64.tar.gz
         tar zxf ZendGuardLoader-php-5.3-linux-glibc23-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-php-5.3-linux-glibc23-x86_64/php-5.3.x/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-php-5.3-linux-glibc23-x86_64/php-5.3.x/ZendGuardLoader.so /fix-data/bin/zend/
     else
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-php-5.3-linux-glibc23-i386.tar.gz
         tar zxf ZendGuardLoader-php-5.3-linux-glibc23-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-php-5.3-linux-glibc23-i386/php-5.3.x/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-php-5.3-linux-glibc23-i386/php-5.3.x/ZendGuardLoader.so /fix-data/bin/zend/
     fi
 
     if [ "${Is_ARM}" != "y" ]; then
         echo "Write ZendGuardLoader to php.ini..."
-        cat >/usr/local/php/conf.d/002-zendguardloader.ini<<EOF
+        cat >/fix-data/bin/php/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
 zend_loader.license_path=
 EOF
 
-        if grep -q '^LoadModule mpm_event_module' /usr/local/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
-            mv /usr/local/php/conf.d/002-zendguardloader.ini /usr/local/php/conf.d/002-zendguardloader.ini.disable
+        if grep -q '^LoadModule mpm_event_module' /fix-data/bin/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
+            mv /fix-data/bin/php/conf.d/002-zendguardloader.ini /fix-data/bin/php/conf.d/002-zendguardloader.ini.disable
         fi
     fi
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -282,9 +282,9 @@ Install_PHP_54()
     Echo_Blue "[+] Installing ${Php_Ver}..."
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -292,19 +292,19 @@ Install_PHP_54()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -313,37 +313,37 @@ Install_PHP_54()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64.tar.gz
         tar zxf ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64/php-5.4.x/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64/php-5.4.x/ZendGuardLoader.so /fix-data/bin/zend/
     else
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386.tar.gz
         tar zxf ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386/php-5.4.x/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386/php-5.4.x/ZendGuardLoader.so /fix-data/bin/zend/
     fi
 
     if [ "${Is_ARM}" != "y" ]; then
         echo "Write ZendGuardLoader to php.ini..."
-        cat >/usr/local/php/conf.d/002-zendguardloader.ini<<EOF
+        cat >/fix-data/bin/php/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
 zend_loader.license_path=
 EOF
 
-        if grep -q '^LoadModule mpm_event_module' /usr/local/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
-            mv /usr/local/php/conf.d/002-zendguardloader.ini /usr/local/php/conf.d/002-zendguardloader.ini.disable
+        if grep -q '^LoadModule mpm_event_module' /fix-data/bin/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
+            mv /fix-data/bin/php/conf.d/002-zendguardloader.ini /fix-data/bin/php/conf.d/002-zendguardloader.ini.disable
         fi
     fi
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -380,9 +380,9 @@ Install_PHP_55()
     Echo_Blue "[+] Installing ${Php_Ver}..."
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
     else
-       ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+       ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -390,19 +390,19 @@ Install_PHP_55()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini..."
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -411,37 +411,37 @@ Install_PHP_55()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.5-linux-x86_64.tar.gz
         tar zxf zend-loader-php5.5-linux-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.5-linux-x86_64/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.5-linux-x86_64/ZendGuardLoader.so /fix-data/bin/zend/
     else
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.5-linux-i386.tar.gz
         tar zxf zend-loader-php5.5-linux-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.5-linux-i386/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.5-linux-i386/ZendGuardLoader.so /fix-data/bin/zend/
     fi
 
     if [ "${Is_ARM}" != "y" ]; then
         echo "Write ZendGuardLoader to php.ini..."
-        cat >/usr/local/php/conf.d/002-zendguardloader.ini<<EOF
+        cat >/fix-data/bin/php/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
 zend_loader.license_path=
 EOF
 
-        if grep -q '^LoadModule mpm_event_module' /usr/local/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
-            mv /usr/local/php/conf.d/002-zendguardloader.ini /usr/local/php/conf.d/002-zendguardloader.ini.disable
+        if grep -q '^LoadModule mpm_event_module' /fix-data/bin/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
+            mv /fix-data/bin/php/conf.d/002-zendguardloader.ini /fix-data/bin/php/conf.d/002-zendguardloader.ini.disable
         fi
     fi
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -478,9 +478,9 @@ Install_PHP_56()
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -488,19 +488,19 @@ Install_PHP_56()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -509,37 +509,37 @@ Install_PHP_56()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-x86_64.tar.gz
         tar zxf zend-loader-php5.6-linux-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /fix-data/bin/zend/
     else
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-i386.tar.gz
         tar zxf zend-loader-php5.6-linux-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /usr/local/zend/
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /fix-data/bin/zend/
     fi
 
     if [ "${Is_ARM}" != "y" ]; then
         echo "Write ZendGuardLoader to php.ini..."
-        cat >/usr/local/php/conf.d/002-zendguardloader.ini<<EOF
+        cat >/fix-data/bin/php/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
 zend_loader.license_path=
 EOF
 
-        if grep -q '^LoadModule mpm_event_module' /usr/local/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
-            mv /usr/local/php/conf.d/002-zendguardloader.ini /usr/local/php/conf.d/002-zendguardloader.ini.disable
+        if grep -q '^LoadModule mpm_event_module' /fix-data/bin/apache/conf/httpd.conf && [ "${ApacheSelect}" = "2" ]; then
+            mv /fix-data/bin/php/conf.d/002-zendguardloader.ini /fix-data/bin/php/conf.d/002-zendguardloader.ini.disable
         fi
     fi
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -575,9 +575,9 @@ Install_PHP_7()
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -585,19 +585,19 @@ Install_PHP_7()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -606,10 +606,10 @@ Install_PHP_7()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -645,9 +645,9 @@ Install_PHP_71()
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -655,19 +655,19 @@ Install_PHP_71()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -676,10 +676,10 @@ Install_PHP_71()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -715,9 +715,9 @@ Install_PHP_72()
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -725,19 +725,19 @@ Install_PHP_72()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -746,10 +746,10 @@ Install_PHP_72()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -785,9 +785,9 @@ Install_PHP_73()
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -795,19 +795,19 @@ Install_PHP_73()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -816,10 +816,10 @@ Install_PHP_73()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -856,9 +856,9 @@ Install_PHP_74()
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/usr/local/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/usr/local/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     fi
 
     PHP_Make_Install
@@ -866,19 +866,19 @@ Install_PHP_74()
     Ln_PHP_Bin
 
     echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
+    mkdir -p /fix-data/bin/php/{etc,conf.d}
+    \cp php.ini-production /fix-data/bin/php/etc/php.ini
 
     cd ${cur_dir}
     # php extensions
     echo "Modify php.ini......"
-    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
-    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /usr/local/php/etc/php.ini
-    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /usr/local/php/etc/php.ini
-    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
-    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /usr/local/php/etc/php.ini
-    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
+    sed -i 's/post_max_size =.*/post_max_size = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;date.timezone =.*/date.timezone = PRC/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/short_open_tag =.*/short_open_tag = On/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/max_execution_time =.*/max_execution_time = 300/g' /fix-data/bin/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /fix-data/bin/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
 
@@ -887,10 +887,10 @@ Install_PHP_74()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
 [global]
-pid = /usr/local/php/var/run/php-fpm.pid
-error_log = /usr/local/php/var/log/php-fpm.log
+pid = /fix-data/bin/php/var/run/php-fpm.pid
+error_log = /fix-data/bin/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
@@ -924,25 +924,25 @@ fi
 LNMP_PHP_Opt()
 {
     if [[ ${MemTotal} -gt 1024 && ${MemTotal} -le 2048 ]]; then
-        sed -i "s#pm.max_children.*#pm.max_children = 20#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.start_servers.*#pm.start_servers = 10#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 10#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 20#" /usr/local/php/etc/php-fpm.conf
+        sed -i "s#pm.max_children.*#pm.max_children = 20#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.start_servers.*#pm.start_servers = 10#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 10#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 20#" /fix-data/bin/php/etc/php-fpm.conf
     elif [[ ${MemTotal} -gt 2048 && ${MemTotal} -le 4096 ]]; then
-        sed -i "s#pm.max_children.*#pm.max_children = 40#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.start_servers.*#pm.start_servers = 20#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 20#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 40#" /usr/local/php/etc/php-fpm.conf
+        sed -i "s#pm.max_children.*#pm.max_children = 40#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.start_servers.*#pm.start_servers = 20#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 20#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 40#" /fix-data/bin/php/etc/php-fpm.conf
     elif [[ ${MemTotal} -gt 4096 && ${MemTotal} -le 8192 ]]; then
-        sed -i "s#pm.max_children.*#pm.max_children = 60#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.start_servers.*#pm.start_servers = 30#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 30#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 60#" /usr/local/php/etc/php-fpm.conf
+        sed -i "s#pm.max_children.*#pm.max_children = 60#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.start_servers.*#pm.start_servers = 30#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 30#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 60#" /fix-data/bin/php/etc/php-fpm.conf
     elif [[ ${MemTotal} -gt 8192 ]]; then
-        sed -i "s#pm.max_children.*#pm.max_children = 80#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.start_servers.*#pm.start_servers = 40#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 40#" /usr/local/php/etc/php-fpm.conf
-        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 80#" /usr/local/php/etc/php-fpm.conf
+        sed -i "s#pm.max_children.*#pm.max_children = 80#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.start_servers.*#pm.start_servers = 40#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.min_spare_servers.*#pm.min_spare_servers = 40#" /fix-data/bin/php/etc/php-fpm.conf
+        sed -i "s#pm.max_spare_servers.*#pm.max_spare_servers = 80#" /fix-data/bin/php/etc/php-fpm.conf
     fi
 }
 

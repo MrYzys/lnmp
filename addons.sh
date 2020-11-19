@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -44,7 +44,7 @@ Display_Addons_Menu()
 
 Restart_PHP()
 {
-    if [ -s /usr/local/apache/bin/httpd ] && [ -s /usr/local/apache/conf/httpd.conf ] && [ -s /etc/init.d/httpd ]; then
+    if [ -s /fix-data/bin/apache/bin/httpd ] && [ -s /fix-data/bin/apache/conf/httpd.conf ] && [ -s /etc/init.d/httpd ]; then
         echo "Restarting Apache......"
         /etc/init.d/httpd restart
     else
@@ -64,41 +64,41 @@ echo "+-----------------------------------------------------------------------+"
 
 Select_PHP()
 {
-    if [[ ! -s /usr/local/php5.2/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.2.conf ]] && [[ ! -s /usr/local/php5.3/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.3.conf ]] && [[ ! -s /usr/local/php5.4/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.4.conf ]] && [[ ! -s /usr/local/php5.5/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.5.conf ]] && [[ ! -s /usr/local/php5.6/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.6.conf ]] && [[ ! -s /usr/local/php7.0/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.0.conf ]] && [[ ! -s /usr/local/php7.1/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.1.conf ]] && [[ ! -s /usr/local/php7.2/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.2.conf ]] && [[ ! -s /usr/local/php7.3/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.3.conf ]] && [[ ! -s /usr/local/php7.4/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.4.conf ]]; then
-        PHP_Path='/usr/local/php'
+    if [[ ! -s /fix-data/bin/php5.2/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.2.conf ]] && [[ ! -s /fix-data/bin/php5.3/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.3.conf ]] && [[ ! -s /fix-data/bin/php5.4/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.4.conf ]] && [[ ! -s /fix-data/bin/php5.5/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.5.conf ]] && [[ ! -s /fix-data/bin/php5.6/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.6.conf ]] && [[ ! -s /fix-data/bin/php7.0/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.0.conf ]] && [[ ! -s /fix-data/bin/php7.1/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.1.conf ]] && [[ ! -s /fix-data/bin/php7.2/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.2.conf ]] && [[ ! -s /fix-data/bin/php7.3/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.3.conf ]] && [[ ! -s /fix-data/bin/php7.4/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.4.conf ]]; then
+        PHP_Path='/fix-data/bin/php'
         PHPFPM_Initd='/etc/init.d/php-fpm'
     else
         echo "Multiple PHP version found, Please select the PHP version."
-        Cur_PHP_Version="`/usr/local/php/bin/php-config --version`"
+        Cur_PHP_Version="`/fix-data/bin/php/bin/php-config --version`"
         Echo_Green "1: Default Main PHP ${Cur_PHP_Version}"
-        if [[ -s /usr/local/php5.2/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.2.conf && -s /etc/init.d/php-fpm5.2 ]]; then
+        if [[ -s /fix-data/bin/php5.2/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.2.conf && -s /etc/init.d/php-fpm5.2 ]]; then
             Echo_Green "2: PHP 5.2 [found]"
         fi
-        if [[ -s /usr/local/php5.3/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.3.conf && -s /etc/init.d/php-fpm5.3 ]]; then
+        if [[ -s /fix-data/bin/php5.3/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.3.conf && -s /etc/init.d/php-fpm5.3 ]]; then
             Echo_Green "3: PHP 5.3 [found]"
         fi
-        if [[ -s /usr/local/php5.4/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.4.conf && -s /etc/init.d/php-fpm5.4 ]]; then
+        if [[ -s /fix-data/bin/php5.4/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.4.conf && -s /etc/init.d/php-fpm5.4 ]]; then
             Echo_Green "4: PHP 5.4 [found]"
         fi
-        if [[ -s /usr/local/php5.5/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.5.conf && -s /etc/init.d/php-fpm5.5 ]]; then
+        if [[ -s /fix-data/bin/php5.5/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.5.conf && -s /etc/init.d/php-fpm5.5 ]]; then
             Echo_Green "5: PHP 5.5 [found]"
         fi
-        if [[ -s /usr/local/php5.6/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.6.conf && -s /etc/init.d/php-fpm5.6 ]]; then
+        if [[ -s /fix-data/bin/php5.6/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.6.conf && -s /etc/init.d/php-fpm5.6 ]]; then
             Echo_Green "6: PHP 5.6 [found]"
         fi
-        if [[ -s /usr/local/php7.0/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.0.conf && -s /etc/init.d/php-fpm7.0 ]]; then
+        if [[ -s /fix-data/bin/php7.0/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.0.conf && -s /etc/init.d/php-fpm7.0 ]]; then
             Echo_Green "7: PHP 7.0 [found]"
         fi
-        if [[ -s /usr/local/php7.1/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.1.conf && -s /etc/init.d/php-fpm7.1 ]]; then
+        if [[ -s /fix-data/bin/php7.1/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.1.conf && -s /etc/init.d/php-fpm7.1 ]]; then
             Echo_Green "8: PHP 7.1 [found]"
         fi
-        if [[ -s /usr/local/php7.2/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.2.conf && -s /etc/init.d/php-fpm7.2 ]]; then
+        if [[ -s /fix-data/bin/php7.2/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.2.conf && -s /etc/init.d/php-fpm7.2 ]]; then
             Echo_Green "9: PHP 7.2 [found]"
         fi
-        if [[ -s /usr/local/php7.3/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.3.conf && -s /etc/init.d/php-fpm7.3 ]]; then
+        if [[ -s /fix-data/bin/php7.3/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.3.conf && -s /etc/init.d/php-fpm7.3 ]]; then
             Echo_Green "10: PHP 7.3 [found]"
         fi
-        if [[ -s /usr/local/php7.4/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.4.conf && -s /etc/init.d/php-fpm7.4 ]]; then
+        if [[ -s /fix-data/bin/php7.4/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.4.conf && -s /etc/init.d/php-fpm7.4 ]]; then
             Echo_Green "11: PHP 7.4 [found]"
         fi
         Echo_Yellow "Enter your choice (1, 2, 3, 4, 5, 6, 7, 8, 9, 10 or 11 ): "
@@ -106,63 +106,63 @@ Select_PHP()
         case "${php_select}" in
             1)
                 echo "Current selection: PHP ${Cur_PHP_Version}"
-                PHP_Path='/usr/local/php'
+                PHP_Path='/fix-data/bin/php'
                 PHPFPM_Initd='/etc/init.d/php-fpm'
                 ;;
             2)
-                echo "Current selection: PHP `/usr/local/php5.2/bin/php-config --version`"
-                PHP_Path='/usr/local/php5.2'
+                echo "Current selection: PHP `/fix-data/bin/php5.2/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php5.2'
                 PHPFPM_Initd='/etc/init.d/php-fpm5.2'
                 ;;
             3)
-                echo "Current selection: PHP `/usr/local/php5.3/bin/php-config --version`"
-                PHP_Path='/usr/local/php5.3'
+                echo "Current selection: PHP `/fix-data/bin/php5.3/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php5.3'
                 PHPFPM_Initd='/etc/init.d/php-fpm5.3'
                 ;;
             4)
-                echo "Current selection: PHP `/usr/local/php5.4/bin/php-config --version`"
-                PHP_Path='/usr/local/php5.4'
+                echo "Current selection: PHP `/fix-data/bin/php5.4/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php5.4'
                 PHPFPM_Initd='/etc/init.d/php-fpm5.4'
                 ;;
             5)
-                echo "Current selection: PHP `/usr/local/php5.5/bin/php-config --version`"
-                PHP_Path='/usr/local/php5.5'
+                echo "Current selection: PHP `/fix-data/bin/php5.5/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php5.5'
                 PHPFPM_Initd='/etc/init.d/php-fpm5.5'
                 ;;
             6)
-                echo "Current selection: PHP `/usr/local/php5.6/bin/php-config --version`"
-                PHP_Path='/usr/local/php5.6'
+                echo "Current selection: PHP `/fix-data/bin/php5.6/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php5.6'
                 PHPFPM_Initd='/etc/init.d/php-fpm5.6'
                 ;;
             7)
-                echo "Current selection:: PHP `/usr/local/php7.0/bin/php-config --version`"
-                PHP_Path='/usr/local/php7.0'
+                echo "Current selection:: PHP `/fix-data/bin/php7.0/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php7.0'
                 PHPFPM_Initd='/etc/init.d/php-fpm7.0'
                 ;;
             8)
-                echo "Current selection:: PHP `/usr/local/php7.1/bin/php-config --version`"
-                PHP_Path='/usr/local/php7.1'
+                echo "Current selection:: PHP `/fix-data/bin/php7.1/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php7.1'
                 PHPFPM_Initd='/etc/init.d/php-fpm7.1'
                 ;;
             9)
-                echo "Current selection:: PHP `/usr/local/php7.2/bin/php-config --version`"
-                PHP_Path='/usr/local/php7.2'
+                echo "Current selection:: PHP `/fix-data/bin/php7.2/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php7.2'
                 PHPFPM_Initd='/etc/init.d/php-fpm7.2'
                 ;;
             10)
-                echo "Current selection:: PHP `/usr/local/php7.3/bin/php-config --version`"
-                PHP_Path='/usr/local/php7.3'
+                echo "Current selection:: PHP `/fix-data/bin/php7.3/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php7.3'
                 PHPFPM_Initd='/etc/init.d/php-fpm7.3'
                 ;;
             11)
-                echo "Current selection:: PHP `/usr/local/php7.4/bin/php-config --version`"
-                PHP_Path='/usr/local/php7.4'
+                echo "Current selection:: PHP `/fix-data/bin/php7.4/bin/php-config --version`"
+                PHP_Path='/fix-data/bin/php7.4'
                 PHPFPM_Initd='/etc/init.d/php-fpm7.4'
                 ;;
             *)
                 echo "Default,Current selection: PHP ${Cur_PHP_Version}"
                 php_select="1"
-                PHP_Path='/usr/local/php'
+                PHP_Path='/fix-data/bin/php'
                 PHPFPM_Initd='/etc/init.d/php-fpm'
                 ;;
         esac

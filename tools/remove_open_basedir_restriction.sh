@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -25,7 +25,7 @@ while :;do
         if [ -f ${website_root}/.user.ini ];then
             chattr -i ${website_root}/.user.ini
             rm -f ${website_root}/.user.ini
-            sed -i 's/^fastcgi_param PHP_ADMIN_VALUE/#fastcgi_param PHP_ADMIN_VALUE/g' /usr/local/nginx/conf/fastcgi.conf
+            sed -i 's/^fastcgi_param PHP_ADMIN_VALUE/#fastcgi_param PHP_ADMIN_VALUE/g' /fix-data/bin/nginx/conf/fastcgi.conf
             /etc/init.d/php-fpm restart
             /etc/init.d/nginx reload
             echo "done."

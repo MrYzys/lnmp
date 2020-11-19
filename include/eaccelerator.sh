@@ -114,14 +114,14 @@ Install_eAccelerator()
         Install_Dev_eA
     fi
 
-    mkdir -p /usr/local/eaccelerator_cache
-    rm -rf /usr/local/eaccelerator_cache/*
+    mkdir -p /fix-data/bin/eaccelerator_cache
+    rm -rf /fix-data/bin/eaccelerator_cache/*
 
     cat >${PHP_Path}/conf.d/001-eaccelerator.ini<<EOF
 [eaccelerator]
 zend_extension="${zend_ext}"
 eaccelerator.shm_size="1"
-eaccelerator.cache_dir="/usr/local/eaccelerator_cache"
+eaccelerator.cache_dir="/fix-data/bin/eaccelerator_cache"
 eaccelerator.enable="1"
 eaccelerator.optimizer="1"
 eaccelerator.check_mtime="1"
@@ -154,7 +154,7 @@ Uninstall_eAccelerator()
     Press_Start
     rm -f ${PHP_Path}/conf.d/001-eaccelerator.ini
     echo "Delete eaccelerator_cache directory..."
-    rm -rf /usr/local/eaccelerator_cache
+    rm -rf /fix-data/bin/eaccelerator_cache
     Restart_PHP
     Echo_Green "Uninstall eAccelerator completed."
 }

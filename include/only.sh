@@ -35,8 +35,8 @@ Install_Only_Nginx()
     cd ${cur_dir}/src
     Download_Files ${Download_Mirror}/web/pcre/${Pcre_Ver}.tar.bz2 ${Pcre_Ver}.tar.bz2
     Install_Pcre
-    if [ `grep -L '/usr/local/lib'    '/etc/ld.so.conf'` ]; then
-        echo "/usr/local/lib" >> /etc/ld.so.conf
+    if [ `grep -L '/fix-data/bin/lib'    '/etc/ld.so.conf'` ]; then
+        echo "/fix-data/bin/lib" >> /etc/ld.so.conf
     fi
     ldconfig
     Download_Files ${Download_Mirror}/web/nginx/${Nginx_Ver}.tar.gz ${Nginx_Ver}.tar.gz

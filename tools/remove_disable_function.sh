@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -54,17 +54,17 @@ cur_dir=$(pwd)
 
 function remove_all_disable_function()
 {
-    sed -i 's/disable_functions =.*/disable_functions =/g' /usr/local/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions =/g' /fix-data/bin/php/etc/php.ini
 }
 
 function remove_scandir_function() 
 {
-    sed -i 's/,scandir//g' /usr/local/php/etc/php.ini
+    sed -i 's/,scandir//g' /fix-data/bin/php/etc/php.ini
 }
 
 function remove_exec_function()
 {
-    sed -i 's/,exec//g' /usr/local/php/etc/php.ini
+    sed -i 's/,exec//g' /fix-data/bin/php/etc/php.ini
 }
 
 if [ "$ver" = "1" ]; then
@@ -75,7 +75,7 @@ elif [ "$ver" = "3" ]; then
     remove_exec_function
 fi
 
-if [ -s /etc/init.d/httpd ] && [ -s /usr/local/apache ]; then
+if [ -s /etc/init.d/httpd ] && [ -s /fix-data/bin/apache ]; then
 echo "Restarting Apache......"
 /etc/init.d/httpd -k restart
 else

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -49,21 +49,21 @@ Install_Pureftpd()
 
     Echo_Blue "Installing pure-ftpd..."
     Tarj_Cd ${Pureftpd_Ver}.tar.bz2 ${Pureftpd_Ver}
-    ./configure --prefix=/usr/local/pureftpd CFLAGS=-O2 --with-puredb --with-quotas --with-cookie --with-virtualhosts --with-diraliases --with-sysquotas --with-ratios --with-altlog --with-paranoidmsg --with-shadow --with-welcomemsg --with-throttling --with-uploadscript --with-language=english --with-rfc2640 --with-ftpwho --with-tls
+    ./configure --prefix=/fix-data/bin/pureftpd CFLAGS=-O2 --with-puredb --with-quotas --with-cookie --with-virtualhosts --with-diraliases --with-sysquotas --with-ratios --with-altlog --with-paranoidmsg --with-shadow --with-welcomemsg --with-throttling --with-uploadscript --with-language=english --with-rfc2640 --with-ftpwho --with-tls
 
     Make_Install
 
     Echo_Blue "Copy configure files..."
-    mkdir /usr/local/pureftpd/etc
-    \cp ${cur_dir}/conf/pure-ftpd.conf /usr/local/pureftpd/etc/pure-ftpd.conf
+    mkdir /fix-data/bin/pureftpd/etc
+    \cp ${cur_dir}/conf/pure-ftpd.conf /fix-data/bin/pureftpd/etc/pure-ftpd.conf
     if [ -L /etc/init.d/pureftpd ]; then
         rm -f /etc/init.d/pureftpd
     fi
     \cp ${cur_dir}/init.d/init.d.pureftpd /etc/init.d/pureftpd
     \cp ${cur_dir}/init.d/pureftpd.service /etc/systemd/system/pureftpd.service
     chmod +x /etc/init.d/pureftpd
-    touch /usr/local/pureftpd/etc/pureftpd.passwd
-    touch /usr/local/pureftpd/etc/pureftpd.pdb
+    touch /fix-data/bin/pureftpd/etc/pureftpd.passwd
+    touch /fix-data/bin/pureftpd/etc/pureftpd.pdb
 
     StartUp pureftpd
 
@@ -104,7 +104,7 @@ Install_Pureftpd()
         useradd -s /sbin/nologin -g www www
     fi
 
-    if [[ -s /usr/local/pureftpd/sbin/pure-ftpd && -s /usr/local/pureftpd/etc/pure-ftpd.conf && -s /etc/init.d/pureftpd ]]; then
+    if [[ -s /fix-data/bin/pureftpd/sbin/pure-ftpd && -s /fix-data/bin/pureftpd/etc/pure-ftpd.conf && -s /etc/init.d/pureftpd ]]; then
         Echo_Blue "Starting pureftpd..."
         /etc/init.d/pureftpd start
         Echo_Green "+----------------------------------------------------------------------+"
@@ -120,7 +120,7 @@ Install_Pureftpd()
 
 Uninstall_Pureftpd()
 {
-    if [ ! -f /usr/local/pureftpd/sbin/pure-ftpd ]; then
+    if [ ! -f /fix-data/bin/pureftpd/sbin/pure-ftpd ]; then
         Echo_Red "Pureftpd was not installed!"
         exit 1
     fi
@@ -130,7 +130,7 @@ Uninstall_Pureftpd()
     Remove_StartUp pureftpd
     echo "Delete files..."
     rm -f /etc/init.d/pureftpd
-    rm -rf /usr/local/pureftpd
+    rm -rf /fix-data/bin/pureftpd
     echo "Pureftpd uninstall completed."
 }
 

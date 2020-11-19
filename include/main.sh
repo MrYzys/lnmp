@@ -69,13 +69,13 @@ Database_Selection()
     fi
 
     if [[ "${DBSelect}" =~ ^[6789]|10$ ]]; then
-        MySQL_Bin="/usr/local/mariadb/bin/mysql"
-        MySQL_Config="/usr/local/mariadb/bin/mysql_config"
-        MySQL_Dir="/usr/local/mariadb"
+        MySQL_Bin="/fix-data/bin/mariadb/bin/mysql"
+        MySQL_Config="/fix-data/bin/mariadb/bin/mysql_config"
+        MySQL_Dir="/fix-data/bin/mariadb"
     elif [[ "${DBSelect}" =~ ^[12345]$ ]]; then
-        MySQL_Bin="/usr/local/mysql/bin/mysql"
-        MySQL_Config="/usr/local/mysql/bin/mysql_config"
-        MySQL_Dir="/usr/local/mysql"
+        MySQL_Bin="/fix-data/bin/mysql/bin/mysql"
+        MySQL_Config="/fix-data/bin/mysql/bin/mysql_config"
+        MySQL_Dir="/fix-data/bin/mysql"
     fi
 
     if [[ "${DBSelect}" != "0" ]]; then
@@ -700,17 +700,17 @@ Echo_Blue()
 
 Get_PHP_Ext_Dir()
 {
-    Cur_PHP_Version="`/usr/local/php/bin/php-config --version`"
-    zend_ext_dir="`/usr/local/php/bin/php-config --extension-dir`/"
+    Cur_PHP_Version="`/fix-data/bin/php/bin/php-config --version`"
+    zend_ext_dir="`/fix-data/bin/php/bin/php-config --extension-dir`/"
 }
 
 Check_Stack()
 {
-    if [[ -s /usr/local/php/sbin/php-fpm && -s /usr/local/php/etc/php-fpm.conf && -s /etc/init.d/php-fpm && -s /usr/local/nginx/sbin/nginx ]]; then
+    if [[ -s /fix-data/bin/php/sbin/php-fpm && -s /fix-data/bin/php/etc/php-fpm.conf && -s /etc/init.d/php-fpm && -s /fix-data/bin/nginx/sbin/nginx ]]; then
         Get_Stack="lnmp"
-    elif [[ -s /usr/local/nginx/sbin/nginx && -s /usr/local/apache/bin/httpd && -s /usr/local/apache/conf/httpd.conf && -s /etc/init.d/httpd && ! -s /usr/local/php/sbin/php-fpm ]]; then
+    elif [[ -s /fix-data/bin/nginx/sbin/nginx && -s /fix-data/bin/apache/bin/httpd && -s /fix-data/bin/apache/conf/httpd.conf && -s /etc/init.d/httpd && ! -s /fix-data/bin/php/sbin/php-fpm ]]; then
         Get_Stack="lnmpa"
-    elif [[ -s /usr/local/apache/bin/httpd && -s /usr/local/apache/conf/httpd.conf && -s /etc/init.d/httpd && ! -s /usr/local/php/sbin/php-fpm ]]; then
+    elif [[ -s /fix-data/bin/apache/bin/httpd && -s /fix-data/bin/apache/conf/httpd.conf && -s /etc/init.d/httpd && ! -s /fix-data/bin/php/sbin/php-fpm ]]; then
         Get_Stack="lamp"
     else
         Get_Stack="unknow"
@@ -719,16 +719,16 @@ Check_Stack()
 
 Check_DB()
 {
-    if [[ -s /usr/local/mariadb/bin/mysql && -s /usr/local/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
-        MySQL_Bin="/usr/local/mariadb/bin/mysql"
-        MySQL_Config="/usr/local/mariadb/bin/mysql_config"
-        MySQL_Dir="/usr/local/mariadb"
+    if [[ -s /fix-data/bin/mariadb/bin/mysql && -s /fix-data/bin/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+        MySQL_Bin="/fix-data/bin/mariadb/bin/mysql"
+        MySQL_Config="/fix-data/bin/mariadb/bin/mysql_config"
+        MySQL_Dir="/fix-data/bin/mariadb"
         Is_MySQL="n"
         DB_Name="mariadb"
-    elif [[ -s /usr/local/mysql/bin/mysql && -s /usr/local/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
-        MySQL_Bin="/usr/local/mysql/bin/mysql"
-        MySQL_Config="/usr/local/mysql/bin/mysql_config"
-        MySQL_Dir="/usr/local/mysql"
+    elif [[ -s /fix-data/bin/mysql/bin/mysql && -s /fix-data/bin/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+        MySQL_Bin="/fix-data/bin/mysql/bin/mysql"
+        MySQL_Config="/fix-data/bin/mysql/bin/mysql_config"
+        MySQL_Dir="/fix-data/bin/mysql"
         Is_MySQL="y"
         DB_Name="mysql"
     else

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -50,12 +50,12 @@ if [ "${PM}" = "yum" ]; then
 
     ln -sf /usr/bin/denyhosts.py /usr/sbin/denyhosts
 elif [ "${PM}" = "apt" ]; then
-    \cp /usr/local/bin/daemon-control-dist /usr/local/bin/daemon-control
-    chown root /usr/local/bin/daemon-control
-    chmod 700 /usr/local/bin/daemon-control
-    \cp /usr/local/bin/daemon-control /etc/init.d/denyhosts
+    \cp /fix-data/bin/bin/daemon-control-dist /fix-data/bin/bin/daemon-control
+    chown root /fix-data/bin/bin/daemon-control
+    chmod 700 /fix-data/bin/bin/daemon-control
+    \cp /fix-data/bin/bin/daemon-control /etc/init.d/denyhosts
 
-    ln -sf /usr/local/bin/denyhosts.py /usr/sbin/denyhosts
+    ln -sf /fix-data/bin/bin/denyhosts.py /usr/sbin/denyhosts
 
     cat >lsb.ini<<EOF
 ### BEGIN INIT INFO

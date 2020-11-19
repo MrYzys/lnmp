@@ -4,7 +4,7 @@ Backup_MariaDB()
 {
     echo "Starting backup all databases..."
     echo "If the database is large, the backup time will be longer."
-    /usr/local/mariadb/bin/mysqldump --defaults-file=~/.my.cnf --all-databases > /root/mariadb_all_backup${Upgrade_Date}.sql
+    /fix-data/bin/mariadb/bin/mysqldump --defaults-file=~/.my.cnf --all-databases > /root/mariadb_all_backup${Upgrade_Date}.sql
     if [ $? -eq 0 ]; then
         echo "MariaDB databases backup successfully.";
     else
@@ -13,10 +13,10 @@ Backup_MariaDB()
     fi
     lnmp stop
 
-    mv /usr/local/mariadb /usr/local/oldmariadb${Upgrade_Date}
-    mv /etc/init.d/mariadb /usr/local/oldmariadb${Upgrade_Date}/init.d.mariadb.bak.${Upgrade_Date}
-    mv /etc/my.cnf /usr/local/oldmariadb${Upgrade_Date}/my.cnf.mariadb.bak.${Upgrade_Date}
-    if [ "${MariaDB_Data_Dir}" != "/usr/local/mariadb/var" ]; then
+    mv /fix-data/bin/mariadb /fix-data/bin/oldmariadb${Upgrade_Date}
+    mv /etc/init.d/mariadb /fix-data/bin/oldmariadb${Upgrade_Date}/init.d.mariadb.bak.${Upgrade_Date}
+    mv /etc/my.cnf /fix-data/bin/oldmariadb${Upgrade_Date}/my.cnf.mariadb.bak.${Upgrade_Date}
+    if [ "${MariaDB_Data_Dir}" != "/fix-data/bin/mariadb/var" ]; then
         mv ${MariaDB_Data_Dir} ${MariaDB_Data_Dir}${Upgrade_Date}
     fi
     if echo "${mariadb_version}" | grep -Eqi '^5.5.' &&  echo "${cur_mariadb_version}" | grep -Eqi '^10.';then
@@ -34,7 +34,7 @@ Upgrade_MariaDB()
 
     Verify_DB_Password
 
-    cur_mariadb_version=`/usr/local/mariadb/bin/mysql_config --version`
+    cur_mariadb_version=`/fix-data/bin/mariadb/bin/mysql_config --version`
     mariadb_version=""
     echo "Current MariaDB Version:${cur_mariadb_version}"
     echo "You can get version number from https://downloads.mariadb.org/"
@@ -70,9 +70,9 @@ Upgrade_MariaDB()
     echo "You will upgrade MariaDB V${cur_mariadb_version} to V${mariadb_version}"
     echo "====================================================================="
 
-    if [ -s /usr/local/include/jemalloc/jemalloc.h ] && lsof -n|grep "libjemalloc.so"|grep -q "mysqld"; then
+    if [ -s /fix-data/bin/include/jemalloc/jemalloc.h ] && lsof -n|grep "libjemalloc.so"|grep -q "mysqld"; then
         MariaDBMAOpt=''
-    elif [ -s /usr/local/include/gperftools/tcmalloc.h ] && lsof -n|grep "libtcmalloc.so"|grep -q "mysqld"; then
+    elif [ -s /fix-data/bin/include/gperftools/tcmalloc.h ] && lsof -n|grep "libtcmalloc.so"|grep -q "mysqld"; then
         MariaDBMAOpt="-DCMAKE_EXE_LINKER_FLAGS='-ltcmalloc' -DWITH_SAFEMALLOC=OFF"
     else
         MariaDBMAOpt=''
@@ -110,11 +110,11 @@ Upgrade_MariaDB()
     MariaDB_WITHSSL
     if echo "${mariadb_version}" | grep -Eqi '^10.4.';then
         patch -p1 < ${cur_dir}/src/patch/mariadb_10.4_install_db.patch
-        cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
+        cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
     elif echo "${mariadb_version}" | grep -Eqi '^10.[123].';then
-        cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1 ${MariaDBWITHSSL}
+        cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1 ${MariaDBWITHSSL}
     else
-        cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MariaDBWITHSSL}
+        cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 ${MariaDBWITHSSL}
     fi
     Make_Install
 
@@ -131,7 +131,7 @@ socket		= /tmp/mysql.sock
 port		= 3306
 socket		= /tmp/mysql.sock
 user    = mariadb
-basedir = /usr/local/mariadb
+basedir = /fix-data/bin/mariadb
 datadir = ${MariaDB_Data_Dir}
 log_error = ${MariaDB_Data_Dir}/mariadb.err
 pid-file = ${MariaDB_Data_Dir}/mariadb.pid
@@ -200,8 +200,8 @@ EOF
         mkdir -p ${MariaDB_Data_Dir}
     fi
     chown -R mariadb:mariadb ${MariaDB_Data_Dir}
-    /usr/local/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
-    chgrp -R mariadb /usr/local/mariadb/.
+    /fix-data/bin/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
+    chgrp -R mariadb /fix-data/bin/mariadb/.
     \cp support-files/mysql.server /etc/init.d/mariadb
     chmod 755 /etc/init.d/mariadb
 
@@ -209,16 +209,16 @@ EOF
     /etc/init.d/mariadb start
 
     echo "Restore backup databases..."
-    /usr/local/mariadb/bin/mysql --defaults-file=~/.my.cnf < /root/mariadb_all_backup${Upgrade_Date}.sql
+    /fix-data/bin/mariadb/bin/mysql --defaults-file=~/.my.cnf < /root/mariadb_all_backup${Upgrade_Date}.sql
     echo "Repair databases..."
-    /usr/local/mariadb/bin/mysql_upgrade -u root -p${DB_Root_Password}
+    /fix-data/bin/mariadb/bin/mysql_upgrade -u root -p${DB_Root_Password}
 
     /etc/init.d/mariadb stop
     TempMycnf_Clean
     cd ${cur_dir} && rm -rf ${cur_dir}/src/mariadb-${mariadb_version}
 
     lnmp start
-    if [[ -s /usr/local/mariadb/bin/mysql && -s /usr/local/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+    if [[ -s /fix-data/bin/mariadb/bin/mysql && -s /fix-data/bin/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
         Echo_Green "======== upgrade MariaDB completed ======"
     else
         Echo_Red "======== upgrade MariaDB failed ======"

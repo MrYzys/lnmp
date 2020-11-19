@@ -59,12 +59,12 @@ ARGV="$@"
 # --------------------                              --------------------
 # 
 # the path to your httpd binary, including options if necessary
-HTTPD='/usr/local/apache/bin/httpd'
-PID='/usr/local/apache/logs/httpd.pid'
+HTTPD='/fix-data/bin/apache/bin/httpd'
+PID='/fix-data/bin/apache/logs/httpd.pid'
 #
 # pick up any necessary environment variables
-if test -f /usr/local/apache/bin/envvars; then
-  . /usr/local/apache/bin/envvars
+if test -f /fix-data/bin/apache/bin/envvars; then
+  . /fix-data/bin/apache/bin/envvars
 fi
 
 ULIMIT_MAX_FILES="ulimit -S -n `ulimit -H -n`"

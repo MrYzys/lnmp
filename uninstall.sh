@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/fix-data/bin/bin:/fix-data/bin/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
@@ -60,18 +60,18 @@ Uninstall_LNMP()
     fi
     chattr -i ${Default_Website_Dir}/.user.ini
     echo "Deleting LNMP files..."
-    rm -rf /usr/local/nginx
-    rm -rf /usr/local/php
-    rm -rf /usr/local/zend
+    rm -rf /fix-data/bin/nginx
+    rm -rf /fix-data/bin/php
+    rm -rf /fix-data/bin/zend
 
     if [ ${DB_Name} != "None" ]; then
-        rm -rf /usr/local/${DB_Name}
+        rm -rf /fix-data/bin/${DB_Name}
         rm -f /etc/my.cnf
         rm -f /etc/init.d/${DB_Name}
     fi
 
-    for mphp in /usr/local/php[5,7].[0-9]; do
-        mphp_ver=`echo $mphp|sed 's#/usr/local/php##'`
+    for mphp in /fix-data/bin/php[5,7].[0-9]; do
+        mphp_ver=`echo $mphp|sed 's#/fix-data/bin/php##'`
         if [ -s /etc/init.d/php-fpm${mphp_ver} ]; then
             /etc/init.d/php-fpm${mphp_ver} stop
             Remove_StartUp php-fpm${mphp_ver}
@@ -82,11 +82,11 @@ Uninstall_LNMP()
         fi
     done
 
-    if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --uninstall
-        rm -rf /usr/local/acme.sh
-        if crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh"; then
-            crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh" | crontab -
+    if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+        /fix-data/bin/acme.sh/acme.sh --uninstall
+        rm -rf /fix-data/bin/acme.sh
+        if crontab -l|grep -v "/fix-data/bin/acme.sh/upgrade.sh"; then
+            crontab -l|grep -v "/fix-data/bin/acme.sh/upgrade.sh" | crontab -
         fi
     fi
 
@@ -114,22 +114,22 @@ Uninstall_LNMPA()
         fi
     fi
     echo "Deleting LNMPA files..."
-    rm -rf /usr/local/nginx
-    rm -rf /usr/local/php
-    rm -rf /usr/local/apache
-    rm -rf /usr/local/zend
+    rm -rf /fix-data/bin/nginx
+    rm -rf /fix-data/bin/php
+    rm -rf /fix-data/bin/apache
+    rm -rf /fix-data/bin/zend
 
     if [ ${DB_Name} != "None" ]; then
-        rm -rf /usr/local/${DB_Name}
+        rm -rf /fix-data/bin/${DB_Name}
         rm -f /etc/my.cnf
         rm -f /etc/init.d/${DB_Name}
     fi
 
-    if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --uninstall
-        rm -rf /usr/local/acme.sh
-        if crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh"; then
-            crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh" | crontab -
+    if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+        /fix-data/bin/acme.sh/acme.sh --uninstall
+        rm -rf /fix-data/bin/acme.sh
+        if crontab -l|grep -v "/fix-data/bin/acme.sh/upgrade.sh"; then
+            crontab -l|grep -v "/fix-data/bin/acme.sh/upgrade.sh" | crontab -
         fi
     fi
 
@@ -156,21 +156,21 @@ Uninstall_LAMP()
         fi
     fi
     echo "Deleting LAMP files..."
-    rm -rf /usr/local/apache
-    rm -rf /usr/local/php
-    rm -rf /usr/local/zend
+    rm -rf /fix-data/bin/apache
+    rm -rf /fix-data/bin/php
+    rm -rf /fix-data/bin/zend
 
     if [ ${DB_Name} != "None" ]; then
-        rm -rf /usr/local/${DB_Name}
+        rm -rf /fix-data/bin/${DB_Name}
         rm -f /etc/my.cnf
         rm -f /etc/init.d/${DB_Name}
     fi
 
-    if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --uninstall
-        rm -rf /usr/local/acme.sh
-        if crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh"; then
-            crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh" | crontab -
+    if [ -s /fix-data/bin/acme.sh/acme.sh ]; then
+        /fix-data/bin/acme.sh/acme.sh --uninstall
+        rm -rf /fix-data/bin/acme.sh
+        if crontab -l|grep -v "/fix-data/bin/acme.sh/upgrade.sh"; then
+            crontab -l|grep -v "/fix-data/bin/acme.sh/upgrade.sh" | crontab -
         fi
     fi
 
@@ -195,13 +195,13 @@ Uninstall_LAMP()
         Echo_Red "Please backup your configure files and mysql data!!!!!!"
         Echo_Red "The following directory or files will be remove!"
         cat << EOF
-/usr/local/nginx
+/fix-data/bin/nginx
 ${MySQL_Dir}
-/usr/local/php
+/fix-data/bin/php
 /etc/init.d/nginx
 /etc/init.d/${DB_Name}
 /etc/init.d/php-fpm
-/usr/local/zend
+/fix-data/bin/zend
 /etc/my.cnf
 /bin/lnmp
 EOF
@@ -214,14 +214,14 @@ EOF
         Echo_Red "Please backup your configure files and mysql data!!!!!!"
         Echo_Red "The following directory or files will be remove!"
         cat << EOF
-/usr/local/nginx
+/fix-data/bin/nginx
 ${MySQL_Dir}
-/usr/local/php
-/usr/local/apache
+/fix-data/bin/php
+/fix-data/bin/apache
 /etc/init.d/nginx
 /etc/init.d/${DB_Name}
 /etc/init.d/httpd
-/usr/local/zend
+/fix-data/bin/zend
 /etc/my.cnf
 /bin/lnmp
 EOF
@@ -234,12 +234,12 @@ EOF
         Echo_Red "Please backup your configure files and mysql data!!!!!!"
         Echo_Red "The following directory or files will be remove!"
         cat << EOF
-/usr/local/apache
+/fix-data/bin/apache
 ${MySQL_Dir}
 /etc/init.d/httpd
 /etc/init.d/${DB_Name}
-/usr/local/php
-/usr/local/zend
+/fix-data/bin/php
+/fix-data/bin/zend
 /etc/my.cnf
 /bin/lnmp
 EOF

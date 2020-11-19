@@ -5,7 +5,7 @@ MariaDB_WITHSSL()
     if openssl version | grep -Eqi "OpenSSL 1.1.*"; then
         if [[ "${DBSelect}" =~ ^7$ ]] || echo "${mariadb_version}" | grep -Eqi '^10.[01].'; then
             Install_Openssl
-            MariaDBWITHSSL='-DWITH_SSL=/usr/local/openssl'
+            MariaDBWITHSSL='-DWITH_SSL=/fix-data/bin/openssl'
         else
             MariaDBWITHSSL=''
         fi
@@ -15,8 +15,8 @@ MariaDB_WITHSSL()
 Mariadb_Sec_Setting()
 {
     cat > /etc/ld.so.conf.d/mariadb.conf<<EOF
-    /usr/local/mariadb/lib
-    /usr/local/lib
+    /fix-data/bin/mariadb/lib
+    /fix-data/bin/lib
 EOF
     ldconfig
 
@@ -30,16 +30,16 @@ EOF
     StartUp mariadb
     /etc/init.d/mariadb start
 
-    ln -sf /usr/local/mariadb/bin/mysql /usr/bin/mysql
-    ln -sf /usr/local/mariadb/bin/mysqldump /usr/bin/mysqldump
-    ln -sf /usr/local/mariadb/bin/myisamchk /usr/bin/myisamchk
-    ln -sf /usr/local/mariadb/bin/mysqld_safe /usr/bin/mysqld_safe
-    ln -sf /usr/local/mariadb/bin/mysqlcheck /usr/bin/mysqlcheck
+    ln -sf /fix-data/bin/mariadb/bin/mysql /usr/bin/mysql
+    ln -sf /fix-data/bin/mariadb/bin/mysqldump /usr/bin/mysqldump
+    ln -sf /fix-data/bin/mariadb/bin/myisamchk /usr/bin/myisamchk
+    ln -sf /fix-data/bin/mariadb/bin/mysqld_safe /usr/bin/mysqld_safe
+    ln -sf /fix-data/bin/mariadb/bin/mysqlcheck /usr/bin/mysqlcheck
 
     /etc/init.d/mariadb restart
     sleep 2
 
-    /usr/local/mariadb/bin/mysqladmin -u root password "${DB_Root_Password}"
+    /fix-data/bin/mariadb/bin/mysqladmin -u root password "${DB_Root_Password}"
 
     /etc/init.d/mariadb restart
     
@@ -54,12 +54,12 @@ user=root
 password=''
 EOF
         if [[ "${DBSelect}" = "10" ]] || echo "${mariadb_version}" | grep -Eqi '^10.4.'; then
-            /usr/local/mariadb/bin/mysql --defaults-file=~/.emptymy.cnf -e "SET PASSWORD = PASSWORD('${DB_Root_Password}');"
+            /fix-data/bin/mariadb/bin/mysql --defaults-file=~/.emptymy.cnf -e "SET PASSWORD = PASSWORD('${DB_Root_Password}');"
         else
-            /usr/local/mariadb/bin/mysql --defaults-file=~/.emptymy.cnf -e "UPDATE mysql.user SET Password=PASSWORD('${DB_Root_Password}') WHERE User='root';"
+            /fix-data/bin/mariadb/bin/mysql --defaults-file=~/.emptymy.cnf -e "UPDATE mysql.user SET Password=PASSWORD('${DB_Root_Password}') WHERE User='root';"
         fi
         [ $? -eq 0 ] && echo "Set password Sucessfully." || echo "Set password failed!"
-        /usr/local/mariadb/bin/mysql --defaults-file=~/.emptymy.cnf -e "FLUSH PRIVILEGES;"
+        /fix-data/bin/mariadb/bin/mysql --defaults-file=~/.emptymy.cnf -e "FLUSH PRIVILEGES;"
         [ $? -eq 0 ] && echo "FLUSH PRIVILEGES Sucessfully." || echo "FLUSH PRIVILEGES failed!"
         rm -f ~/.emptymy.cnf
     fi
@@ -105,7 +105,7 @@ Install_MariaDB_5()
     Echo_Blue "[+] Installing ${Mariadb_Ver}..."
     rm -f /etc/my.cnf
     Tar_Cd ${Mariadb_Ver}.tar.gz ${Mariadb_Ver}
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1
     Make_Install
 
     groupadd mariadb
@@ -121,7 +121,7 @@ socket		= /tmp/mysql.sock
 port		= 3306
 socket		= /tmp/mysql.sock
 user    = mariadb
-basedir = /usr/local/mariadb
+basedir = /fix-data/bin/mariadb
 datadir = ${MariaDB_Data_Dir}
 log_error = ${MariaDB_Data_Dir}/mariadb.err
 pid-file = ${MariaDB_Data_Dir}/mariadb.pid
@@ -189,8 +189,8 @@ EOF
     MySQL_Opt
     Check_MariaDB_Data_Dir
     chown -R mariadb:mariadb ${MariaDB_Data_Dir}
-    /usr/local/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
-    chgrp -R mariadb /usr/local/mariadb/.
+    /fix-data/bin/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
+    chgrp -R mariadb /fix-data/bin/mariadb/.
     \cp support-files/mysql.server /etc/init.d/mariadb
     \cp ${cur_dir}/init.d/mariadb.service /etc/systemd/system/mariadb.service
     chmod 755 /etc/init.d/mariadb
@@ -204,7 +204,7 @@ Install_MariaDB_101()
     rm -f /etc/my.cnf
     MariaDB_WITHSSL
     Tar_Cd ${Mariadb_Ver}.tar.gz ${Mariadb_Ver}
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1 ${MariaDBWITHSSL}
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1 ${MariaDBWITHSSL}
     Make_Install
 
     groupadd mariadb
@@ -220,7 +220,7 @@ socket      = /tmp/mysql.sock
 port        = 3306
 socket      = /tmp/mysql.sock
 user    = mariadb
-basedir = /usr/local/mariadb
+basedir = /fix-data/bin/mariadb
 datadir = ${MariaDB_Data_Dir}
 log_error = ${MariaDB_Data_Dir}/mariadb.err
 pid-file = ${MariaDB_Data_Dir}/mariadb.pid
@@ -287,8 +287,8 @@ EOF
     MySQL_Opt
     Check_MariaDB_Data_Dir
     chown -R mariadb:mariadb ${MariaDB_Data_Dir}
-    /usr/local/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
-    chgrp -R mariadb /usr/local/mariadb/.
+    /fix-data/bin/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
+    chgrp -R mariadb /fix-data/bin/mariadb/.
     \cp support-files/mysql.server /etc/init.d/mariadb
     \cp ${cur_dir}/init.d/mariadb.service /etc/systemd/system/mariadb.service
     chmod 755 /etc/init.d/mariadb
@@ -301,7 +301,7 @@ Install_MariaDB_102()
     Echo_Blue "[+] Installing ${Mariadb_Ver}..."
     rm -f /etc/my.cnf
     Tar_Cd ${Mariadb_Ver}.tar.gz ${Mariadb_Ver}
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
     Make_Install
 
     groupadd mariadb
@@ -317,7 +317,7 @@ socket      = /tmp/mysql.sock
 port        = 3306
 socket      = /tmp/mysql.sock
 user    = mariadb
-basedir = /usr/local/mariadb
+basedir = /fix-data/bin/mariadb
 datadir = ${MariaDB_Data_Dir}
 log_error = ${MariaDB_Data_Dir}/mariadb.err
 pid-file = ${MariaDB_Data_Dir}/mariadb.pid
@@ -384,8 +384,8 @@ EOF
     MySQL_Opt
     Check_MariaDB_Data_Dir
     chown -R mariadb:mariadb ${MariaDB_Data_Dir}
-    /usr/local/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
-    chgrp -R mariadb /usr/local/mariadb/.
+    /fix-data/bin/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
+    chgrp -R mariadb /fix-data/bin/mariadb/.
     \cp support-files/mysql.server /etc/init.d/mariadb
     \cp ${cur_dir}/init.d/mariadb.service /etc/systemd/system/mariadb.service
     chmod 755 /etc/init.d/mariadb
@@ -398,7 +398,7 @@ Install_MariaDB_103()
     Echo_Blue "[+] Installing ${Mariadb_Ver}..."
     rm -f /etc/my.cnf
     Tar_Cd ${Mariadb_Ver}.tar.gz ${Mariadb_Ver}
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DWITH_ARIA_STORAGE_ENGINE=1 -DWITH_XTRADB_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1 -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
     Make_Install
 
     groupadd mariadb
@@ -414,7 +414,7 @@ socket      = /tmp/mysql.sock
 port        = 3306
 socket      = /tmp/mysql.sock
 user    = mariadb
-basedir = /usr/local/mariadb
+basedir = /fix-data/bin/mariadb
 datadir = ${MariaDB_Data_Dir}
 log_error = ${MariaDB_Data_Dir}/mariadb.err
 pid-file = ${MariaDB_Data_Dir}/mariadb.pid
@@ -481,8 +481,8 @@ EOF
     MySQL_Opt
     Check_MariaDB_Data_Dir
     chown -R mariadb:mariadb ${MariaDB_Data_Dir}
-    /usr/local/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
-    chgrp -R mariadb /usr/local/mariadb/.
+    /fix-data/bin/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
+    chgrp -R mariadb /fix-data/bin/mariadb/.
     \cp support-files/mysql.server /etc/init.d/mariadb
     \cp ${cur_dir}/init.d/mariadb.service /etc/systemd/system/mariadb.service
     chmod 755 /etc/init.d/mariadb
@@ -496,7 +496,7 @@ Install_MariaDB_104()
     rm -f /etc/my.cnf
     Tar_Cd ${Mariadb_Ver}.tar.gz ${Mariadb_Ver}
     patch -p1 < ${cur_dir}/src/patch/mariadb_10.4_install_db.patch
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
+    cmake -DCMAKE_INSTALL_PREFIX=/fix-data/bin/mariadb -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_READLINE=1 -DWITH_EMBEDDED_SERVER=1 -DENABLED_LOCAL_INFILE=1 -DWITHOUT_TOKUDB=1
     Make_Install
 
     groupadd mariadb
@@ -512,7 +512,7 @@ socket      = /tmp/mysql.sock
 port        = 3306
 socket      = /tmp/mysql.sock
 user    = mariadb
-basedir = /usr/local/mariadb
+basedir = /fix-data/bin/mariadb
 datadir = ${MariaDB_Data_Dir}
 log_error = ${MariaDB_Data_Dir}/mariadb.err
 pid-file = ${MariaDB_Data_Dir}/mariadb.pid
@@ -579,8 +579,8 @@ EOF
     MySQL_Opt
     Check_MariaDB_Data_Dir
     chown -R mariadb:mariadb ${MariaDB_Data_Dir}
-    /usr/local/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
-    chgrp -R mariadb /usr/local/mariadb/.
+    /fix-data/bin/mariadb/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/fix-data/bin/mariadb --datadir=${MariaDB_Data_Dir} --user=mariadb
+    chgrp -R mariadb /fix-data/bin/mariadb/.
     \cp support-files/mysql.server /etc/init.d/mariadb
     \cp ${cur_dir}/init.d/mariadb.service /etc/systemd/system/mariadb.service
     chmod 755 /etc/init.d/mariadb

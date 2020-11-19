@@ -12,26 +12,26 @@ Upgrade_Multiplephp()
         exit 1
     fi
 
-    if [[ ! -s /usr/local/php5.6/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php5.6.conf ]] && [[ ! -s /usr/local/php7.0/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.0.conf ]] && [[ ! -s /usr/local/php7.1/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.1.conf ]] && [[ ! -s /usr/local/php7.2/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.2.conf ]] && [[ ! -s /usr/local/php7.3/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.3.conf ]] && [[ ! -s /usr/local/php7.4/sbin/php-fpm && ! -s /usr/local/nginx/conf/enable-php7.4.conf ]]; then
+    if [[ ! -s /fix-data/bin/php5.6/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php5.6.conf ]] && [[ ! -s /fix-data/bin/php7.0/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.0.conf ]] && [[ ! -s /fix-data/bin/php7.1/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.1.conf ]] && [[ ! -s /fix-data/bin/php7.2/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.2.conf ]] && [[ ! -s /fix-data/bin/php7.3/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.3.conf ]] && [[ ! -s /fix-data/bin/php7.4/sbin/php-fpm && ! -s /fix-data/bin/nginx/conf/enable-php7.4.conf ]]; then
         echo "Multiple php version not found!"
     else
         echo "List all mutiple php, Please select the PHP version."
-        if [[ -s /usr/local/php5.6/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php5.6.conf && -s /etc/init.d/php-fpm5.6 ]]; then
+        if [[ -s /fix-data/bin/php5.6/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php5.6.conf && -s /etc/init.d/php-fpm5.6 ]]; then
             Echo_Green "1: PHP 5.6 [found]"
         fi
-        if [[ -s /usr/local/php7.0/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.0.conf && -s /etc/init.d/php-fpm7.0 ]]; then
+        if [[ -s /fix-data/bin/php7.0/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.0.conf && -s /etc/init.d/php-fpm7.0 ]]; then
             Echo_Green "2: PHP 7.0 [found]"
         fi
-        if [[ -s /usr/local/php7.1/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.1.conf && -s /etc/init.d/php-fpm7.1 ]]; then
+        if [[ -s /fix-data/bin/php7.1/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.1.conf && -s /etc/init.d/php-fpm7.1 ]]; then
             Echo_Green "3: PHP 7.1 [found]"
         fi
-        if [[ -s /usr/local/php7.2/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.2.conf && -s /etc/init.d/php-fpm7.2 ]]; then
+        if [[ -s /fix-data/bin/php7.2/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.2.conf && -s /etc/init.d/php-fpm7.2 ]]; then
             Echo_Green "4: PHP 7.2 [found]"
         fi
-        if [[ -s /usr/local/php7.3/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.3.conf && -s /etc/init.d/php-fpm7.3 ]]; then
+        if [[ -s /fix-data/bin/php7.3/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.3.conf && -s /etc/init.d/php-fpm7.3 ]]; then
             Echo_Green "5: PHP 7.3 [found]"
         fi
-        if [[ -s /usr/local/php7.4/sbin/php-fpm && -s /usr/local/nginx/conf/enable-php7.4.conf && -s /etc/init.d/php-fpm7.4 ]]; then
+        if [[ -s /fix-data/bin/php7.4/sbin/php-fpm && -s /fix-data/bin/nginx/conf/enable-php7.4.conf && -s /etc/init.d/php-fpm7.4 ]]; then
             Echo_Green "6: PHP 7.4 [found]"
         fi
     fi
@@ -48,22 +48,22 @@ Upgrade_Multiplephp()
 
     if [ "${MPHP_Select}" = "1" ]; then
         Cur_MPHP_Big_Ver="5.6"
-        Cur_MPHP_Path='/usr/local/php5.6'
+        Cur_MPHP_Path='/fix-data/bin/php5.6'
     elif [ "${MPHP_Select}" = "2" ]; then
         Cur_MPHP_Big_Ver="7.0"
-        Cur_MPHP_Path='/usr/local/php7.0'
+        Cur_MPHP_Path='/fix-data/bin/php7.0'
     elif [ "${MPHP_Select}" = "3" ]; then
         Cur_MPHP_Big_Ver="7.1"
-        Cur_MPHP_Path='/usr/local/php7.1'
+        Cur_MPHP_Path='/fix-data/bin/php7.1'
     elif [ "${MPHP_Select}" = "4" ]; then
         Cur_MPHP_Big_Ver="7.2"
-        Cur_MPHP_Path='/usr/local/php7.2'
+        Cur_MPHP_Path='/fix-data/bin/php7.2'
     elif [ "${MPHP_Select}" = "5" ]; then
         Cur_MPHP_Big_Ver="7.3"
-        Cur_MPHP_Path='/usr/local/php7.3'
+        Cur_MPHP_Path='/fix-data/bin/php7.3'
     elif [ "${MPHP_Select}" = "6" ]; then
         Cur_MPHP_Big_Ver="7.4"
-        Cur_MPHP_Path='/usr/local/php7.4'
+        Cur_MPHP_Path='/fix-data/bin/php7.4'
     fi
 
     Echo_Yellow "Please choose whic multiple php version to upgrade."
@@ -116,8 +116,8 @@ Upgrade_Multiplephp()
     lnmp stop
 
     Echo_Blue "Backup old multiple php version..."
-    mv ${Cur_MPHP_Path} /usr/local/mphp-${Cur_MPHP_Big_Ver}-backup${Upgrade_Date}
-    mv /etc/init.d/php-fpm${Cur_MPHP_Big_Ver} /usr/local/mphp-${Cur_MPHP_Big_Ver}-backup${Upgrade_Date}/init.d.php-fpm.bak.${Upgrade_Date}
+    mv ${Cur_MPHP_Path} /fix-data/bin/mphp-${Cur_MPHP_Big_Ver}-backup${Upgrade_Date}
+    mv /etc/init.d/php-fpm${Cur_MPHP_Big_Ver} /fix-data/bin/mphp-${Cur_MPHP_Big_Ver}-backup${Upgrade_Date}/init.d.php-fpm.bak.${Upgrade_Date}
 
     Check_PHP_Option
     cat /etc/issue
@@ -145,7 +145,7 @@ Upgrade_MPHP5.6()
     Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
-    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -169,19 +169,19 @@ Upgrade_MPHP5.6()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-x86_64.tar.gz
         tar zxf zend-loader-php5.6-linux-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.6.so
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.6.so
     else
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-i386.tar.gz
         tar zxf zend-loader-php5.6-linux-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.6.so
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.6.so
     fi
 
     echo "Write ZendGuardLoader to php.ini..."
     cat >${Cur_MPHP_Path}/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader5.6.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader5.6.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
@@ -220,7 +220,7 @@ EOF
 
     StartUp php-fpm5.6
 
-    \cp ${cur_dir}/conf/enable-php5.6.conf /usr/local/nginx/conf/enable-php5.6.conf
+    \cp ${cur_dir}/conf/enable-php5.6.conf /fix-data/bin/nginx/conf/enable-php5.6.conf
 
     sleep 2
 
@@ -244,7 +244,7 @@ Upgrade_MPHP7.0()
     Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
-    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -298,7 +298,7 @@ EOF
 
     StartUp php-fpm7.0
 
-    \cp ${cur_dir}/conf/enable-php7.0.conf /usr/local/nginx/conf/enable-php7.0.conf
+    \cp ${cur_dir}/conf/enable-php7.0.conf /fix-data/bin/nginx/conf/enable-php7.0.conf
 
     sleep 2
 
@@ -322,7 +322,7 @@ Upgrade_MPHP7.1()
     Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
-    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -376,7 +376,7 @@ EOF
 
     StartUp php-fpm7.1
 
-    \cp ${cur_dir}/conf/enable-php7.1.conf /usr/local/nginx/conf/enable-php7.1.conf
+    \cp ${cur_dir}/conf/enable-php7.1.conf /fix-data/bin/nginx/conf/enable-php7.1.conf
 
     sleep 2
 
@@ -400,7 +400,7 @@ Upgrade_MPHP7.2()
     Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
-    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -454,7 +454,7 @@ EOF
 
     StartUp php-fpm7.2
 
-    \cp ${cur_dir}/conf/enable-php7.2.conf /usr/local/nginx/conf/enable-php7.2.conf
+    \cp ${cur_dir}/conf/enable-php7.2.conf /fix-data/bin/nginx/conf/enable-php7.2.conf
 
     sleep 2
 
@@ -478,7 +478,7 @@ Upgrade_MPHP7.3()
     Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
-    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -532,7 +532,7 @@ EOF
 
     StartUp php-fpm7.3
 
-    \cp ${cur_dir}/conf/enable-php7.3.conf /usr/local/nginx/conf/enable-php7.3.conf
+    \cp ${cur_dir}/conf/enable-php7.3.conf /fix-data/bin/nginx/conf/enable-php7.3.conf
 
     sleep 2
 
@@ -557,7 +557,7 @@ Upgrade_MPHP7.4()
     Install_Libzip
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
-    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/usr/local/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+    ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -611,7 +611,7 @@ EOF
 
     StartUp php-fpm7.4
 
-    \cp ${cur_dir}/conf/enable-php7.4.conf /usr/local/nginx/conf/enable-php7.4.conf
+    \cp ${cur_dir}/conf/enable-php7.4.conf /fix-data/bin/nginx/conf/enable-php7.4.conf
 
     sleep 2
 

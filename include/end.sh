@@ -55,7 +55,7 @@ Add_LNMP_Startup()
     StartUp php-fpm
     /etc/init.d/php-fpm start
     if [ "${PHPSelect}" = "1" ]; then
-        sed -i 's#/usr/local/php/var/run/php-fpm.pid#/usr/local/php/logs/php-fpm.pid#' /bin/lnmp
+        sed -i 's#/fix-data/bin/php/var/run/php-fpm.pid#/fix-data/bin/php/logs/php-fpm.pid#' /bin/lnmp
     fi
 }
 
@@ -104,7 +104,7 @@ Check_Nginx_Files()
     isNginx=""
     echo "============================== Check install =============================="
     echo "Checking ..."
-    if [[ -s /usr/local/nginx/conf/nginx.conf && -s /usr/local/nginx/sbin/nginx ]]; then
+    if [[ -s /fix-data/bin/nginx/conf/nginx.conf && -s /fix-data/bin/nginx/sbin/nginx ]]; then
         Echo_Green "Nginx: OK"
         isNginx="ok"
     else
@@ -116,14 +116,14 @@ Check_DB_Files()
 {
     isDB=""
     if [[ "${DBSelect}" =~ ^[6789]|10$ ]]; then
-        if [[ -s /usr/local/mariadb/bin/mysql && -s /usr/local/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+        if [[ -s /fix-data/bin/mariadb/bin/mysql && -s /fix-data/bin/mariadb/bin/mysqld_safe && -s /etc/my.cnf ]]; then
             Echo_Green "MariaDB: OK"
             isDB="ok"
         else
             Echo_Red "Error: MariaDB install failed."
         fi
     elif [[ "${DBSelect}" =~ ^[12345]$ ]]; then
-        if [[ -s /usr/local/mysql/bin/mysql && -s /usr/local/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
+        if [[ -s /fix-data/bin/mysql/bin/mysql && -s /fix-data/bin/mysql/bin/mysqld_safe && -s /etc/my.cnf ]]; then
             Echo_Green "MySQL: OK"
             isDB="ok"
         else
@@ -139,7 +139,7 @@ Check_PHP_Files()
 {
     isPHP=""
     if [ "${Stack}" = "lnmp" ]; then
-        if [[ -s /usr/local/php/sbin/php-fpm && -s /usr/local/php/etc/php.ini && -s /usr/local/php/bin/php ]]; then
+        if [[ -s /fix-data/bin/php/sbin/php-fpm && -s /fix-data/bin/php/etc/php.ini && -s /fix-data/bin/php/bin/php ]]; then
             Echo_Green "PHP: OK"
             Echo_Green "PHP-FPM: OK"
             isPHP="ok"
@@ -147,7 +147,7 @@ Check_PHP_Files()
             Echo_Red "Error: PHP install failed."
         fi
     else
-        if [[ -s /usr/local/php/bin/php && -s /usr/local/php/etc/php.ini ]]; then
+        if [[ -s /fix-data/bin/php/bin/php && -s /fix-data/bin/php/etc/php.ini ]]; then
             Echo_Green "PHP: OK"
             isPHP="ok"
         else
@@ -160,14 +160,14 @@ Check_Apache_Files()
 {
     isApache=""
     if [[ "${PHPSelect}" =~ ^[6789]|10$ ]]; then
-        if [[ -s /usr/local/apache/bin/httpd && -s /usr/local/apache/modules/libphp7.so && -s /usr/local/apache/conf/httpd.conf ]]; then
+        if [[ -s /fix-data/bin/apache/bin/httpd && -s /fix-data/bin/apache/modules/libphp7.so && -s /fix-data/bin/apache/conf/httpd.conf ]]; then
             Echo_Green "Apache: OK"
             isApache="ok"
         else
             Echo_Red "Error: Apache install failed."
         fi
     else
-        if [[ -s /usr/local/apache/bin/httpd && -s /usr/local/apache/modules/libphp5.so && -s /usr/local/apache/conf/httpd.conf ]]; then
+        if [[ -s /fix-data/bin/apache/bin/httpd && -s /fix-data/bin/apache/modules/libphp5.so && -s /fix-data/bin/apache/conf/httpd.conf ]]; then
             Echo_Green "Apache: OK"
             isApache="ok"
         else

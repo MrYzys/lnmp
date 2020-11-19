@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=forking
-ExecStart=/usr/local/redis/bin/redis-server /usr/local/redis/etc/redis.conf
-ExecStop=/usr/local/redis/bin/redis-cli shutdown
+ExecStart=/fix-data/bin/redis/bin/redis-server /fix-data/bin/redis/etc/redis.conf
+ExecStop=/fix-data/bin/redis/bin/redis-cli shutdown
 PrivateTmp=false
 
 [Install]

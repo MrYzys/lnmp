@@ -14,7 +14,7 @@ Install_Redis()
     fi
 
     cd ${cur_dir}/src
-    if [ -s /usr/local/redis/bin/redis-server ]; then
+    if [ -s /fix-data/bin/redis/bin/redis-server ]; then
         echo "Redis server already exists."
     else
         if gcc -dumpversion|grep -q "^[34]."; then
@@ -29,17 +29,17 @@ Install_Redis()
             sed -i 's/FINAL_LIBS=-lm/FINAL_LIBS=-lm -latomic/' src/Makefile
         fi
         if [[ "${Is_64bit}" = "y" || "${Is_ARM}" = "y" ]]; then
-            make PREFIX=/usr/local/redis install
+            make PREFIX=/fix-data/bin/redis install
         else
-            make CFLAGS="-march=i686" PREFIX=/usr/local/redis install
+            make CFLAGS="-march=i686" PREFIX=/fix-data/bin/redis install
         fi
-        mkdir -p /usr/local/redis/etc/
-        \cp redis.conf  /usr/local/redis/etc/
-        sed -i 's/daemonize no/daemonize yes/g' /usr/local/redis/etc/redis.conf
-        if ! grep -Eqi '^bind[[:space:]]*127.0.0.1' /usr/local/redis/etc/redis.conf; then
-            sed -i 's/^# bind 127.0.0.1/bind 127.0.0.1/g' /usr/local/redis/etc/redis.conf
+        mkdir -p /fix-data/bin/redis/etc/
+        \cp redis.conf  /fix-data/bin/redis/etc/
+        sed -i 's/daemonize no/daemonize yes/g' /fix-data/bin/redis/etc/redis.conf
+        if ! grep -Eqi '^bind[[:space:]]*127.0.0.1' /fix-data/bin/redis/etc/redis.conf; then
+            sed -i 's/^# bind 127.0.0.1/bind 127.0.0.1/g' /fix-data/bin/redis/etc/redis.conf
         fi
-        sed -i 's#^pidfile /var/run/redis_6379.pid#pidfile /var/run/redis.pid#g' /usr/local/redis/etc/redis.conf
+        sed -i 's#^pidfile /var/run/redis_6379.pid#pidfile /var/run/redis.pid#g' /fix-data/bin/redis/etc/redis.conf
         cd ../
         rm -rf ${cur_dir}/src/${Redis_Stable_Ver}
 
@@ -93,7 +93,7 @@ EOF
     Restart_PHP
     /etc/init.d/redis start
 
-    if [ -s "${zend_ext}" ] && [ -s /usr/local/redis/bin/redis-server ]; then
+    if [ -s "${zend_ext}" ] && [ -s /fix-data/bin/redis/bin/redis-server ]; then
         Echo_Green "====== Redis install completed ======"
         Echo_Green "Redis installed successfully, enjoy it!"
     else
@@ -110,7 +110,7 @@ Uninstall_Redis()
     Restart_PHP
     Remove_StartUp redis
     echo "Delete Redis files..."
-    rm -rf /usr/local/redis
+    rm -rf /fix-data/bin/redis
     rm -rf /etc/init.d/redis
     if command -v iptables >/dev/null 2>&1; then
         iptables -D INPUT -p tcp --dport 6379 -j DROP

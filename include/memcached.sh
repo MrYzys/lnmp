@@ -38,7 +38,7 @@ Install_PHPMemcached()
     if gcc -dumpversion|grep -Eq "^[7-9]|10"; then
         patch -p1 < ${cur_dir}/src/patch/libmemcached-1.0.18-gcc7.patch
     fi
-    ./configure --prefix=/usr/local/libmemcached --with-memcached
+    ./configure --prefix=/fix-data/bin/libmemcached --with-memcached
     Make_Install
     cd ../
 
@@ -51,7 +51,7 @@ Install_PHPMemcached()
         Tar_Cd ${PHPMemcached_Ver}.tgz ${PHPMemcached_Ver}
     fi
     ${PHP_Path}/bin/phpize
-    ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-memcached --with-libmemcached-dir=/usr/local/libmemcached
+    ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-memcached --with-libmemcached-dir=/fix-data/bin/libmemcached
     Make_Install
     cd ../
 }
@@ -92,17 +92,17 @@ EOF
 
     echo "Install memcached..."
     cd ${cur_dir}/src
-    if [ -s /usr/local/memcached/bin/memcached ]; then
+    if [ -s /fix-data/bin/memcached/bin/memcached ]; then
         echo "Memcached already exists."
     else
         Download_Files ${Download_Mirror}/web/memcached/${Memcached_Ver}.tar.gz ${Memcached_Ver}.tar.gz
         Tar_Cd ${Memcached_Ver}.tar.gz ${Memcached_Ver}
-        ./configure --prefix=/usr/local/memcached
+        ./configure --prefix=/fix-data/bin/memcached
         make &&make install
         cd ../
         rm -rf ${cur_dir}/src/${Memcached_Ver}
 
-        ln -sf /usr/local/memcached/bin/memcached /usr/bin/memcached
+        ln -sf /fix-data/bin/memcached/bin/memcached /usr/bin/memcached
 
         \cp ${cur_dir}/init.d/init.d.memcached /etc/init.d/memcached
         chmod +x /etc/init.d/memcached
@@ -148,7 +148,7 @@ EOF
     echo "Starting Memcached..."
     /etc/init.d/memcached start
 
-    if [ -s "${zend_ext}" ] && [ -s /usr/local/memcached/bin/memcached ]; then
+    if [ -s "${zend_ext}" ] && [ -s /fix-data/bin/memcached/bin/memcached ]; then
         Echo_Green "====== Memcached install completed ======"
         Echo_Green "Memcached installed successfully, enjoy it!"
     else
@@ -165,8 +165,8 @@ Uninstall_Memcached()
     Restart_PHP
     Remove_StartUp memcached
     echo "Delete Memcached files..."
-    rm -rf /usr/local/libmemcached
-    rm -rf /usr/local/memcached
+    rm -rf /fix-data/bin/libmemcached
+    rm -rf /fix-data/bin/memcached
     rm -rf /etc/init.d/memcached
     rm -rf /usr/bin/memcached
     if command -v iptables >/dev/null 2>&1; then

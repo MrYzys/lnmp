@@ -350,7 +350,7 @@ Install_Autoconf()
     cd ${cur_dir}/src
     Download_Files ${Download_Mirror}/lib/autoconf/${Autoconf_Ver}.tar.gz ${Autoconf_Ver}.tar.gz
     Tar_Cd ${Autoconf_Ver}.tar.gz ${Autoconf_Ver}
-    ./configure --prefix=/usr/local/autoconf-2.13
+    ./configure --prefix=/fix-data/bin/autoconf-2.13
     Make_Install
     cd ${cur_dir}/src/
     rm -rf ${cur_dir}/src/${Autoconf_Ver}
@@ -376,10 +376,10 @@ Install_Libmcrypt()
     cd libltdl/
     ./configure --enable-ltdl-install
     Make_Install
-    ln -sf /usr/local/lib/libmcrypt.la /usr/lib/libmcrypt.la
-    ln -sf /usr/local/lib/libmcrypt.so /usr/lib/libmcrypt.so
-    ln -sf /usr/local/lib/libmcrypt.so.4 /usr/lib/libmcrypt.so.4
-    ln -sf /usr/local/lib/libmcrypt.so.4.4.8 /usr/lib/libmcrypt.so.4.4.8
+    ln -sf /fix-data/bin/lib/libmcrypt.la /usr/lib/libmcrypt.la
+    ln -sf /fix-data/bin/lib/libmcrypt.so /usr/lib/libmcrypt.so
+    ln -sf /fix-data/bin/lib/libmcrypt.so.4 /usr/lib/libmcrypt.so.4
+    ln -sf /fix-data/bin/lib/libmcrypt.so.4.4.8 /usr/lib/libmcrypt.so.4.4.8
     ldconfig
     cd ${cur_dir}/src/
     rm -rf ${cur_dir}/src/${LibMcrypt_Ver}
@@ -401,11 +401,11 @@ Install_Mhash()
     Tarj_Cd ${Mhash_Ver}.tar.bz2 ${Mhash_Ver}
     ./configure
     Make_Install
-    ln -sf /usr/local/lib/libmhash.a /usr/lib/libmhash.a
-    ln -sf /usr/local/lib/libmhash.la /usr/lib/libmhash.la
-    ln -sf /usr/local/lib/libmhash.so /usr/lib/libmhash.so
-    ln -sf /usr/local/lib/libmhash.so.2 /usr/lib/libmhash.so.2
-    ln -sf /usr/local/lib/libmhash.so.2.0.1 /usr/lib/libmhash.so.2.0.1
+    ln -sf /fix-data/bin/lib/libmhash.a /usr/lib/libmhash.a
+    ln -sf /fix-data/bin/lib/libmhash.la /usr/lib/libmhash.la
+    ln -sf /fix-data/bin/lib/libmhash.so /usr/lib/libmhash.so
+    ln -sf /fix-data/bin/lib/libmhash.so.2 /usr/lib/libmhash.so.2
+    ln -sf /fix-data/bin/lib/libmhash.so.2.0.1 /usr/lib/libmhash.so.2.0.1
     ldconfig
     cd ${cur_dir}/src/
     rm -rf ${cur_dir}/src/${Mhash_Ver}
@@ -417,36 +417,36 @@ Install_Freetype()
         Download_Files ${Download_Mirror}/lib/freetype/${Freetype_New_Ver}.tar.xz ${Freetype_New_Ver}.tar.xz
         Echo_Blue "[+] Installing ${Freetype_New_Ver}"
         TarJ_Cd ${Freetype_New_Ver}.tar.xz ${Freetype_New_Ver}
-        ./configure --prefix=/usr/local/freetype --enable-freetype-config
+        ./configure --prefix=/fix-data/bin/freetype --enable-freetype-config
     else
         Download_Files ${Download_Mirror}/lib/freetype/${Freetype_Ver}.tar.bz2 ${Freetype_Ver}.tar.bz2
         Echo_Blue "[+] Installing ${Freetype_Ver}"
         Tarj_Cd ${Freetype_Ver}.tar.bz2 ${Freetype_Ver}
-        ./configure --prefix=/usr/local/freetype
+        ./configure --prefix=/fix-data/bin/freetype
     fi
     Make_Install
 
-    [[ -d /usr/lib/pkgconfig ]] && \cp /usr/local/freetype/lib/pkgconfig/freetype2.pc /usr/lib/pkgconfig/
+    [[ -d /usr/lib/pkgconfig ]] && \cp /fix-data/bin/freetype/lib/pkgconfig/freetype2.pc /usr/lib/pkgconfig/
     cat > /etc/ld.so.conf.d/freetype.conf<<EOF
-/usr/local/freetype/lib
+/fix-data/bin/freetype/lib
 EOF
     ldconfig
-    ln -sf /usr/local/freetype/include/freetype2/* /usr/include/
+    ln -sf /fix-data/bin/freetype/include/freetype2/* /usr/include/
     cd ${cur_dir}/src/
     rm -rf ${cur_dir}/src/${Freetype_Ver}
 }
 
 Install_Curl()
 {
-    if [[ ! -s /usr/local/curl/bin/curl || ! -s /usr/local/curl/lib/libcurl.so || ! -s /usr/local/curl/include/curl/curl.h ]]; then
+    if [[ ! -s /fix-data/bin/curl/bin/curl || ! -s /fix-data/bin/curl/lib/libcurl.so || ! -s /fix-data/bin/curl/include/curl/curl.h ]]; then
         Echo_Blue "[+] Installing ${Curl_Ver}"
         cd ${cur_dir}/src
         Download_Files ${Download_Mirror}/lib/curl/${Curl_Ver}.tar.bz2 ${Curl_Ver}.tar.bz2
         Tarj_Cd ${Curl_Ver}.tar.bz2 ${Curl_Ver}
-        if [ -s /usr/local/openssl/bin/openssl ] || /usr/local/openssl/bin/openssl version | grep -Eqi 'OpenSSL 1.0.2'; then
-            ./configure --prefix=/usr/local/curl --enable-ares --without-nss --with-zlib --with-ssl=/usr/local/openssl
+        if [ -s /fix-data/bin/openssl/bin/openssl ] || /fix-data/bin/openssl/bin/openssl version | grep -Eqi 'OpenSSL 1.0.2'; then
+            ./configure --prefix=/fix-data/bin/curl --enable-ares --without-nss --with-zlib --with-ssl=/fix-data/bin/openssl
         else
-            ./configure --prefix=/usr/local/curl --enable-ares --without-nss --with-zlib --with-ssl
+            ./configure --prefix=/fix-data/bin/curl --enable-ares --without-nss --with-zlib --with-ssl
         fi
         Make_Install
         cd ${cur_dir}/src/
@@ -477,7 +477,7 @@ Install_Jemalloc()
     ldconfig
     cd ${cur_dir}/src/
     rm -rf ${cur_dir}/src/${Jemalloc_Ver}
-    ln -sf /usr/local/lib/libjemalloc* /usr/lib/
+    ln -sf /fix-data/bin/lib/libjemalloc* /usr/lib/
 }
 
 Install_TCMalloc()
@@ -500,7 +500,7 @@ Install_TCMalloc()
     ldconfig
     cd ${cur_dir}/src/
     rm -rf ${cur_dir}/src/${TCMalloc_Ver}
-    ln -sf /usr/local/lib/libtcmalloc* /usr/lib/
+    ln -sf /fix-data/bin/lib/libtcmalloc* /usr/lib/
 }
 
 Install_Icu4c()
@@ -567,13 +567,13 @@ Install_Boost()
 
 Install_Openssl()
 {
-    if [ ! -s /usr/local/openssl/bin/openssl ] || /usr/local/openssl/bin/openssl version | grep -v 'OpenSSL 1.0.2'; then
+    if [ ! -s /fix-data/bin/openssl/bin/openssl ] || /fix-data/bin/openssl/bin/openssl version | grep -v 'OpenSSL 1.0.2'; then
         Echo_Blue "[+] Installing ${Openssl_Ver}"
         cd ${cur_dir}/src
         Download_Files ${Download_Mirror}/lib/openssl/${Openssl_Ver}.tar.gz ${Openssl_Ver}.tar.gz
         [[ -d "${Openssl_Ver}" ]] && rm -rf ${Openssl_Ver}
         Tar_Cd ${Openssl_Ver}.tar.gz ${Openssl_Ver}
-        ./config -fPIC --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
+        ./config -fPIC --prefix=/fix-data/bin/openssl --openssldir=/fix-data/bin/openssl
         make depend
         Make_Install
         cd ${cur_dir}/src/
@@ -584,22 +584,22 @@ Install_Openssl()
 Install_Openssl_New()
 {
     if openssl version | grep -vEqi "OpenSSL 1.1.1*"; then
-        if [ ! -s /usr/local/openssl1.1.1/bin/openssl ] || /usr/local/openssl1.1.1/bin/openssl version | grep -Eqi 'OpenSSL 1.1.1*'; then
+        if [ ! -s /fix-data/bin/openssl1.1.1/bin/openssl ] || /fix-data/bin/openssl1.1.1/bin/openssl version | grep -Eqi 'OpenSSL 1.1.1*'; then
             Echo_Blue "[+] Installing ${Openssl_New_Ver}"
             cd ${cur_dir}/src
             Download_Files ${Download_Mirror}/lib/openssl/${Openssl_New_Ver}.tar.gz ${Openssl_New_Ver}.tar.gz
             [[ -d "${Openssl_New_Ver}" ]] && rm -rf ${Openssl_New_Ver}
             Tar_Cd ${Openssl_New_Ver}.tar.gz ${Openssl_New_Ver}
-            ./config enable-weak-ssl-ciphers -fPIC --prefix=/usr/local/openssl1.1.1 --openssldir=/usr/local/openssl1.1.1
+            ./config enable-weak-ssl-ciphers -fPIC --prefix=/fix-data/bin/openssl1.1.1 --openssldir=/fix-data/bin/openssl1.1.1
             make depend
             Make_Install
-            ln -sf /usr/local/openssl1.1.1/lib/libcrypto.so.1.1 /usr/lib/
-            ln -sf /usr/local/openssl1.1.1/lib/libssl.so.1.1 /usr/lib/
+            ln -sf /fix-data/bin/openssl1.1.1/lib/libcrypto.so.1.1 /usr/lib/
+            ln -sf /fix-data/bin/openssl1.1.1/lib/libssl.so.1.1 /usr/lib/
             cd ${cur_dir}/src/
             rm -rf ${cur_dir}/src/${Openssl_New_Ver}
         fi
         ldconfig
-        apache_with_ssl='--with-ssl=/usr/local/openssl1.1.1'
+        apache_with_ssl='--with-ssl=/fix-data/bin/openssl1.1.1'
     else
         apache_with_ssl='--with-ssl'
     fi
@@ -607,13 +607,13 @@ Install_Openssl_New()
 
 Install_Nghttp2()
 {
-    if [[ ! -s /usr/local/nghttp2/lib/libnghttp2.so || ! -s /usr/local/nghttp2/include/nghttp2/nghttp2.h ]]; then
+    if [[ ! -s /fix-data/bin/nghttp2/lib/libnghttp2.so || ! -s /fix-data/bin/nghttp2/include/nghttp2/nghttp2.h ]]; then
         Echo_Blue "[+] Installing ${Nghttp2_Ver}"
         cd ${cur_dir}/src
         Download_Files ${Download_Mirror}/lib/nghttp2/${Nghttp2_Ver}.tar.xz ${Nghttp2_Ver}.tar.xz
         [[ -d "${Nghttp2_Ver}" ]] && rm -rf ${Nghttp2_Ver}
         TarJ_Cd ${Nghttp2_Ver}.tar.xz ${Nghttp2_Ver}
-        ./configure --prefix=/usr/local/nghttp2
+        ./configure --prefix=/fix-data/bin/nghttp2
         Make_Install
         cd ${cur_dir}/src/
         rm -rf ${cur_dir}/src/${Nghttp2_Ver}
@@ -623,7 +623,7 @@ Install_Nghttp2()
 Install_Libzip()
 {
     if echo "${CentOS_Version}" | grep -Eqi "^7"  || echo "${RHEL_Version}" | grep -Eqi "^7"; then
-        if [ ! -s /usr/local/lib/libzip.so ]; then
+        if [ ! -s /fix-data/bin/lib/libzip.so ]; then
             Echo_Blue "[+] Installing ${Libzip_Ver}"
             cd ${cur_dir}/src
             Download_Files ${Download_Mirror}/lib/libzip/${Libzip_Ver}.tar.xz ${Libzip_Ver}.tar.xz
@@ -633,7 +633,7 @@ Install_Libzip()
             cd ${cur_dir}/src/
             rm -rf ${cur_dir}/src/${Libzip_Ver}
         fi
-        export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
+        export PKG_CONFIG_PATH=/fix-data/bin/lib/pkgconfig:$PKG_CONFIG_PATH
         ldconfig
     fi
 }
@@ -661,8 +661,8 @@ CentOS_Lib_Opt()
         #echo "/usr/lib64/openssl/engines" >> /etc/ld.so.conf
     fi
 
-    if [ `grep -L '/usr/local/lib'    '/etc/ld.so.conf'` ]; then
-        echo "/usr/local/lib" >> /etc/ld.so.conf
+    if [ `grep -L '/fix-data/bin/lib'    '/etc/ld.so.conf'` ]; then
+        echo "/fix-data/bin/lib" >> /etc/ld.so.conf
     fi
 
     ldconfig
@@ -719,8 +719,8 @@ Deb_Lib_Opt()
         echo "/usr/lib64" >> /etc/ld.so.conf
     fi
 
-    if [ `grep -L '/usr/local/lib'    '/etc/ld.so.conf'` ]; then
-        echo "/usr/local/lib" >> /etc/ld.so.conf
+    if [ `grep -L '/fix-data/bin/lib'    '/etc/ld.so.conf'` ]; then
+        echo "/fix-data/bin/lib" >> /etc/ld.so.conf
     fi
 
     if [ -d /usr/include/x86_64-linux-gnu/curl ]; then
@@ -751,8 +751,8 @@ eof
 
 Remove_Error_Libcurl()
 {
-    if [ -s /usr/local/lib/libcurl.so ]; then
-        rm -f /usr/local/lib/libcurl*
+    if [ -s /fix-data/bin/lib/libcurl.so ]; then
+        rm -f /fix-data/bin/lib/libcurl*
     fi
 }
 

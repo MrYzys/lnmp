@@ -32,7 +32,7 @@ Install_Multiplephp()
     case "${PHPSelect}" in
     1)
         echo "You will install ${PHP_Info[0]}"
-        MPHP_Path='/usr/local/php5.2'
+        MPHP_Path='/fix-data/bin/php5.2'
         Check_DB
         if [ "${DB_Name}" == "None" ];then
             Echo_Red "MySQL or MariaDB not found,can't install PHP 5.2!"
@@ -41,39 +41,39 @@ Install_Multiplephp()
         ;;
     2)
         echo "You will install ${PHP_Info[1]}"
-        MPHP_Path='/usr/local/php5.3'
+        MPHP_Path='/fix-data/bin/php5.3'
         ;;
     3)
         echo "You will Install ${PHP_Info[2]}"
-        MPHP_Path='/usr/local/php5.4'
+        MPHP_Path='/fix-data/bin/php5.4'
         ;;
     4)
         echo "You will install ${PHP_Info[3]}"
-        MPHP_Path='/usr/local/php5.5'
+        MPHP_Path='/fix-data/bin/php5.5'
         ;;
     5)
         echo "You will install ${PHP_Info[4]}"
-        MPHP_Path='/usr/local/php5.6'
+        MPHP_Path='/fix-data/bin/php5.6'
         ;;
     6)
         echo "You will install ${PHP_Info[5]}"
-        MPHP_Path='/usr/local/php7.0'
+        MPHP_Path='/fix-data/bin/php7.0'
         ;;
     7)
         echo "You will install ${PHP_Info[6]}"
-        MPHP_Path='/usr/local/php7.1'
+        MPHP_Path='/fix-data/bin/php7.1'
         ;;
     8)
         echo "You will install ${PHP_Info[7]}"
-        MPHP_Path='/usr/local/php7.2'
+        MPHP_Path='/fix-data/bin/php7.2'
         ;;
     9)
         echo "You will install ${PHP_Info[8]}"
-        MPHP_Path='/usr/local/php7.3'
+        MPHP_Path='/fix-data/bin/php7.3'
         ;;
     10)
         echo "You will install ${PHP_Info[9]}"
-        MPHP_Path='/usr/local/php7.4'
+        MPHP_Path='/fix-data/bin/php7.4'
         ;;
     *)
         echo "No enter,You Must enter one option."
@@ -122,13 +122,13 @@ Install_MPHP5.2()
 
     lnmp stop
 
-    if [[ -s /usr/local/autoconf-2.13/bin/autoconf && -s /usr/local/autoconf-2.13/bin/autoheader ]]; then
+    if [[ -s /fix-data/bin/autoconf-2.13/bin/autoconf && -s /fix-data/bin/autoconf-2.13/bin/autoheader ]]; then
         Echo_Green "Autconf 2.13...ok"
     else
         Install_Autoconf
     fi
 
-    ln -s /usr/lib/libevent-1.4.so.2 /usr/local/lib/libevent-1.4.so.2
+    ln -s /usr/lib/libevent-1.4.so.2 /fix-data/bin/lib/libevent-1.4.so.2
     ln -s /usr/lib/libltdl.so /usr/lib/libltdl.so.3
 
     cd ${cur_dir}/src
@@ -143,7 +143,7 @@ Install_MPHP5.2()
     patch -p0 < ${cur_dir}/src/patch/php-5.2.17-xml.patch
     patch -p1 < ${cur_dir}/src/patch/debian_patches_disable_SSLv2_for_openssl_1_0_0.patch
     ./buildconf --force
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --with-mysql=${MySQL_Dir} --with-mysqli=${MySQL_Config} --with-pdo-mysql=${MySQL_Dir} --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-fastcgi --enable-fpm --enable-force-cgi-redirect --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --with-mime-magic
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --with-mysql=${MySQL_Dir} --with-mysqli=${MySQL_Config} --with-pdo-mysql=${MySQL_Dir} --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-fastcgi --enable-fpm --enable-force-cgi-redirect --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --with-mime-magic
     PHP_Make_Install
 
     mkdir -p ${MPHP_Path}/{etc,conf.d}
@@ -165,30 +165,30 @@ Install_MPHP5.2()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/ZendOptimizer-3.3.9-linux-glibc23-x86_64.tar.gz
         tar zxf ZendOptimizer-3.3.9-linux-glibc23-x86_64.tar.gz
-        mkdir -p /usr/local/zend52/
-        \cp ZendOptimizer-3.3.9-linux-glibc23-x86_64/data/5_2_x_comp/ZendOptimizer.so /usr/local/zend52/ZendOptimizer5.2.so
+        mkdir -p /fix-data/bin/zend52/
+        \cp ZendOptimizer-3.3.9-linux-glibc23-x86_64/data/5_2_x_comp/ZendOptimizer.so /fix-data/bin/zend52/ZendOptimizer5.2.so
     else
         Download_Files ${Download_Mirror}/web/zend/ZendOptimizer-3.3.9-linux-glibc23-i386.tar.gz
         tar zxf ZendOptimizer-3.3.9-linux-glibc23-i386.tar.gz
-        mkdir -p /usr/local/zend52/
-        \cp ZendOptimizer-3.3.9-linux-glibc23-i386/data/5_2_x_comp/ZendOptimizer.so /usr/local/zend52/ZendOptimizer5.2.so
+        mkdir -p /fix-data/bin/zend52/
+        \cp ZendOptimizer-3.3.9-linux-glibc23-i386/data/5_2_x_comp/ZendOptimizer.so /fix-data/bin/zend52/ZendOptimizer5.2.so
     fi
 
     cat >${MPHP_Path}/conf.d/002-zendoptimizer.ini<<EOF
 [Zend Optimizer]
 zend_optimizer.optimization_level=1
-zend_extension="/usr/local/zend52/ZendOptimizer5.2.so"
+zend_extension="/fix-data/bin/zend52/ZendOptimizer5.2.so"
 EOF
 
     rm -f ${MPHP_Path}/etc/php-fpm.conf
     \cp ${cur_dir}/conf/php-fpm5.2.conf ${MPHP_Path}/etc/php-fpm.conf
-    \cp ${cur_dir}/conf/enable-php5.2.conf /usr/local/nginx/conf/enable-php5.2.conf
+    \cp ${cur_dir}/conf/enable-php5.2.conf /fix-data/bin/nginx/conf/enable-php5.2.conf
     \cp ${cur_dir}/init.d/init.d.php-fpm5.2 /etc/init.d/php-fpm5.2
     chmod +x /etc/init.d/php-fpm5.2
 
-    sed -i "s#/usr/local/php/#${MPHP_Path}/#g" ${MPHP_Path}/etc/php-fpm.conf
+    sed -i "s#/fix-data/bin/php/#${MPHP_Path}/#g" ${MPHP_Path}/etc/php-fpm.conf
     sed -i 's#php-cgi.sock#php-cgi5.2.sock#g' ${MPHP_Path}/etc/php-fpm.conf
-    sed -i "s#/usr/local/php/#${MPHP_Path}/#g" /etc/init.d/php-fpm5.2
+    sed -i "s#/fix-data/bin/php/#${MPHP_Path}/#g" /etc/init.d/php-fpm5.2
     sed -i 's@# Provides:          php-fpm@# Provides:          php-fpm5.2@g' /etc/init.d/php-fpm5.2
 
     StartUp php-fpm5.2
@@ -218,7 +218,7 @@ Install_MPHP5.3()
     Echo_Blue "[+] Installing ${Php_Ver}..."
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
     patch -p1 < ${cur_dir}/src/patch/php-5.3-multipart-form-data.patch
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -244,19 +244,19 @@ Install_MPHP5.3()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-php-5.3-linux-glibc23-x86_64.tar.gz
         tar zxf ZendGuardLoader-php-5.3-linux-glibc23-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-php-5.3-linux-glibc23-x86_64/php-5.3.x/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.3.so
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-php-5.3-linux-glibc23-x86_64/php-5.3.x/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.3.so
     else
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-php-5.3-linux-glibc23-i386.tar.gz
         tar zxf ZendGuardLoader-php-5.3-linux-glibc23-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-php-5.3-linux-glibc23-i386/php-5.3.x/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.3.so
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-php-5.3-linux-glibc23-i386/php-5.3.x/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.3.so
     fi
 
     echo "Write ZendGuardLoader to php.ini..."
     cat >${MPHP_Path}/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader5.3.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader5.3.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
@@ -295,7 +295,7 @@ EOF
 
     StartUp php-fpm5.3
 
-    \cp ${cur_dir}/conf/enable-php5.3.conf /usr/local/nginx/conf/enable-php5.3.conf
+    \cp ${cur_dir}/conf/enable-php5.3.conf /fix-data/bin/nginx/conf/enable-php5.3.conf
 
     sleep 2
 
@@ -321,7 +321,7 @@ Install_MPHP5.4()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}..."
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -345,19 +345,19 @@ Install_MPHP5.4()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64.tar.gz
         tar zxf ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64/php-5.4.x/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.4.so
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64/php-5.4.x/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.4.so
     else
         Download_Files ${Download_Mirror}/web/zend/ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386.tar.gz
         tar zxf ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386/php-5.4.x/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.4.so
+        mkdir -p /fix-data/bin/zend/
+        \cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386/php-5.4.x/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.4.so
     fi
 
     echo "Write ZendGuardLoader to php.ini..."
     cat >${MPHP_Path}/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader5.4.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader5.4.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
@@ -396,7 +396,7 @@ EOF
 
     StartUp php-fpm5.4
 
-    \cp ${cur_dir}/conf/enable-php5.4.conf /usr/local/nginx/conf/enable-php5.4.conf
+    \cp ${cur_dir}/conf/enable-php5.4.conf /fix-data/bin/nginx/conf/enable-php5.4.conf
 
     sleep 2
 
@@ -422,7 +422,7 @@ Install_MPHP5.5()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}..."
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -446,19 +446,19 @@ Install_MPHP5.5()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.5-linux-x86_64.tar.gz
         tar zxf zend-loader-php5.5-linux-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.5-linux-x86_64/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.5.so
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.5-linux-x86_64/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.5.so
     else
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.5-linux-i386.tar.gz
         tar zxf zend-loader-php5.5-linux-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.5-linux-i386/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.5.so
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.5-linux-i386/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.5.so
     fi
 
     echo "Write ZendGuardLoader to php.ini..."
     cat >${MPHP_Path}/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader5.5.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader5.5.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
@@ -497,7 +497,7 @@ EOF
 
     StartUp php-fpm5.5
 
-    \cp ${cur_dir}/conf/enable-php5.5.conf /usr/local/nginx/conf/enable-php5.5.conf
+    \cp ${cur_dir}/conf/enable-php5.5.conf /fix-data/bin/nginx/conf/enable-php5.5.conf
 
     sleep 2
 
@@ -523,7 +523,7 @@ Install_MPHP5.6()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -547,19 +547,19 @@ Install_MPHP5.6()
     if [ "${Is_64bit}" = "y" ] ; then
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-x86_64.tar.gz
         tar zxf zend-loader-php5.6-linux-x86_64.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.6.so
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.6.so
     else
         Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-i386.tar.gz
         tar zxf zend-loader-php5.6-linux-i386.tar.gz
-        mkdir -p /usr/local/zend/
-        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /usr/local/zend/ZendGuardLoader5.6.so
+        mkdir -p /fix-data/bin/zend/
+        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /fix-data/bin/zend/ZendGuardLoader5.6.so
     fi
 
     echo "Write ZendGuardLoader to php.ini..."
     cat >${MPHP_Path}/conf.d/002-zendguardloader.ini<<EOF
 [Zend ZendGuard Loader]
-zend_extension=/usr/local/zend/ZendGuardLoader5.6.so
+zend_extension=/fix-data/bin/zend/ZendGuardLoader5.6.so
 zend_loader.enable=1
 zend_loader.disable_licensing=0
 zend_loader.obfuscation_level_support=3
@@ -598,7 +598,7 @@ EOF
 
     StartUp php-fpm5.6
 
-    \cp ${cur_dir}/conf/enable-php5.6.conf /usr/local/nginx/conf/enable-php5.6.conf
+    \cp ${cur_dir}/conf/enable-php5.6.conf /fix-data/bin/nginx/conf/enable-php5.6.conf
 
     sleep 2
 
@@ -624,7 +624,7 @@ Install_MPHP7.0()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -678,7 +678,7 @@ EOF
 
     StartUp php-fpm7.0
 
-    \cp ${cur_dir}/conf/enable-php7.0.conf /usr/local/nginx/conf/enable-php7.0.conf
+    \cp ${cur_dir}/conf/enable-php7.0.conf /fix-data/bin/nginx/conf/enable-php7.0.conf
 
     sleep 2
 
@@ -704,7 +704,7 @@ Install_MPHP7.1()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -758,7 +758,7 @@ EOF
 
     StartUp php-fpm7.1
 
-    \cp ${cur_dir}/conf/enable-php7.1.conf /usr/local/nginx/conf/enable-php7.1.conf
+    \cp ${cur_dir}/conf/enable-php7.1.conf /fix-data/bin/nginx/conf/enable-php7.1.conf
 
     sleep 2
 
@@ -784,7 +784,7 @@ Install_MPHP7.2()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -838,7 +838,7 @@ EOF
 
     StartUp php-fpm7.2
 
-    \cp ${cur_dir}/conf/enable-php7.2.conf /usr/local/nginx/conf/enable-php7.2.conf
+    \cp ${cur_dir}/conf/enable-php7.2.conf /fix-data/bin/nginx/conf/enable-php7.2.conf
 
     sleep 2
 
@@ -864,7 +864,7 @@ Install_MPHP7.3()
     Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -918,7 +918,7 @@ EOF
 
     StartUp php-fpm7.3
 
-    \cp ${cur_dir}/conf/enable-php7.3.conf /usr/local/nginx/conf/enable-php7.3.conf
+    \cp ${cur_dir}/conf/enable-php7.3.conf /fix-data/bin/nginx/conf/enable-php7.3.conf
 
     sleep 2
 
@@ -945,7 +945,7 @@ Install_MPHP7.4()
     Install_Libzip
     Echo_Blue "[+] Installing ${Php_Ver}"
     Tarj_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/usr/local/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+    ./configure --prefix=${MPHP_Path} --with-config-file-path=${MPHP_Path}/etc --with-config-file-scan-dir=${MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
 
     PHP_Make_Install
 
@@ -999,7 +999,7 @@ EOF
 
     StartUp php-fpm7.4
 
-    \cp ${cur_dir}/conf/enable-php7.4.conf /usr/local/nginx/conf/enable-php7.4.conf
+    \cp ${cur_dir}/conf/enable-php7.4.conf /fix-data/bin/nginx/conf/enable-php7.4.conf
 
     sleep 2
 
