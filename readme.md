@@ -1,3 +1,6 @@
+
+### 本项目Fork自 licess  因为对服务器文件管理的方式不同，做了一些改变， 感谢原作者的贡献，如有人需要整合进自己的项目请标注原始的项目主页https://github.com/licess/lnmp
+
 # LNMP一键安装包 - Readme
 
 ## LNMP一键安装包是什么?
