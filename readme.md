@@ -156,9 +156,9 @@ MariaDB 10.4 | 10 | PHP 7.4 | 10 | | | |
 * PHP：/fix-data/bin/php/
 * 多PHP目录：/fix-data/bin/php5.6/ 版本号随安装版本不同而不同
 * PHP扩展插件配置文件目录：/fix-data/bin/php/conf.d/
-* PHPMyAdmin：/home/wwwroot/default/phpmyadmin/
-* 默认虚拟主机网站目录：/home/wwwroot/default/
-* Nginx日志目录：/home/wwwlogs/
+* PHPMyAdmin：/fix-data/app/default/phpmyadmin/
+* 默认虚拟主机网站目录：/fix-data/app/default/
+* Nginx日志目录：/dynamic-data/log/nginx/
 
 ### 配置文件：
 * Nginx主配置文件：/fix-data/bin/nginx/conf/nginx.conf
@@ -177,7 +177,7 @@ MariaDB 10.4 | 10 | PHP 7.4 | 10 | | | |
 |PHP_Modules_Options|添加PHP模块或编译参数|--enable-exif 有些模块需提前安装好依赖包|
 |MySQL_Data_Dir|MySQL数据库目录设置|默认/fix-data/bin/mysql/var|
 |MariaDB_Data_Dir|MariaDB数据库目录设置|默认/fix-data/bin/mariadb/var|
-|Default_Website_Dir|默认虚拟主机网站目录位置|默认/home/wwwroot/default|
+|Default_Website_Dir|默认虚拟主机网站目录位置|默认/fix-data/app/default|
 |Enable_Nginx_Openssl|Nginx是否使用新版openssl|默认 y，建议不修改，y是启用并开启到http2|
 |Enable_PHP_Fileinfo|是否安装开启php的fileinfo模块|默认n，根据自己情况而定，安装启用的话改成 y|
 |Enable_Nginx_Lua|是否为Nginx安装lua支持|默认n，安装lua可以使用一些基于lua的waf网站防火墙|

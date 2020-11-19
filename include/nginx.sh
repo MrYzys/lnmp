@@ -65,8 +65,8 @@ EOF
 Install_Nginx()
 {
     Echo_Blue "[+] Installing ${Nginx_Ver}... "
-    groupadd www
-    useradd -s /sbin/nologin -g www www
+    groupadd app
+    useradd -s /sbin/nologin -g app app
 
     cd ${cur_dir}/src
     Install_Nginx_Openssl
@@ -81,9 +81,9 @@ Install_Nginx()
     fi
     Nginx_Ver_Com=$(${cur_dir}/include/version_compare 1.9.4 ${Nginx_Version})
     if [[ "${Nginx_Ver_Com}" == "0" ||  "${Nginx_Ver_Com}" == "1" ]]; then
-        ./configure --user=www --group=www --prefix=/fix-data/bin/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_spdy_module --with-http_gzip_static_module --with-ipv6 --with-http_sub_module ${Nginx_With_Openssl} ${Nginx_With_Pcre} ${Nginx_Module_Lua} ${NginxMAOpt} ${Nginx_Modules_Options}
+        ./configure --user=app --group=app --prefix=/fix-data/bin/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_spdy_module --with-http_gzip_static_module --with-ipv6 --with-http_sub_module ${Nginx_With_Openssl} ${Nginx_With_Pcre} ${Nginx_Module_Lua} ${NginxMAOpt} ${Nginx_Modules_Options}
     else
-        ./configure --user=www --group=www --prefix=/fix-data/bin/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-http_sub_module --with-stream --with-stream_ssl_module ${Nginx_With_Openssl} ${Nginx_With_Pcre} ${Nginx_Module_Lua} ${NginxMAOpt} ${Nginx_Modules_Options}
+        ./configure --user=app --group=app --prefix=/fix-data/bin/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-http_sub_module --with-stream --with-stream_ssl_module ${Nginx_With_Openssl} ${Nginx_With_Pcre} ${Nginx_Module_Lua} ${NginxMAOpt} ${Nginx_Modules_Options}
     fi
     Make_Install
     cd ../
@@ -114,15 +114,15 @@ Install_Nginx()
 
     mkdir -p ${Default_Website_Dir}
     chmod +w ${Default_Website_Dir}
-    mkdir -p /home/wwwlogs
-    chmod 777 /home/wwwlogs
+    mkdir -p /dynamic-data/log/nginx
+    chmod 777 /dynamic-data/log/nginx
 
-    chown -R www:www ${Default_Website_Dir}
+    chown -R app:app ${Default_Website_Dir}
 
     mkdir /fix-data/bin/nginx/conf/vhost
 
-    if [ "${Default_Website_Dir}" != "/home/wwwroot/default" ]; then
-        sed -i "s#/home/wwwroot/default#${Default_Website_Dir}#g" /fix-data/bin/nginx/conf/nginx.conf
+    if [ "${Default_Website_Dir}" != "/fix-data/app/default" ]; then
+        sed -i "s#/fix-data/app/default#${Default_Website_Dir}#g" /fix-data/bin/nginx/conf/nginx.conf
     fi
 
     if [ "${Stack}" = "lnmp" ]; then
@@ -142,7 +142,7 @@ EOF
 
     if [ "${SelectMalloc}" = "3" ]; then
         mkdir /tmp/tcmalloc
-        chown -R www:www /tmp/tcmalloc
+        chown -R app:app /tmp/tcmalloc
         sed -i '/nginx.pid/a\
 google_perftools_profiles /tmp/tcmalloc;' /fix-data/bin/nginx/conf/nginx.conf
     fi

@@ -9,7 +9,7 @@
 Backup_Home="/home/backup/"
 MySQL_Dump="/fix-data/bin/mysql/bin/mysqldump"
 ######~Set Directory you want to backup~######
-Backup_Dir=("/home/wwwroot/vpser.net" "/home/wwwroot/lnmp.org")
+Backup_Dir=("/fix-data/app/vpser.net" "/fix-data/app/lnmp.org")
 
 ######~Set MySQL Database you want to backup~######
 Backup_Database=("lnmp" "vpser")

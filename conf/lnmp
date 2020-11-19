@@ -425,12 +425,12 @@ Add_VHost()
         echo " domain list: ${moredomain}"
     fi
 
-    vhostdir="/home/wwwroot/${domain}"
+    vhostdir="/fix-data/app/${domain}"
     echo "Please enter the directory for the domain: $domain"
-    Echo_Yellow "Default directory: /home/wwwroot/${domain}: "
+    Echo_Yellow "Default directory: /fix-data/app/${domain}: "
     read vhostdir
     if [ "${vhostdir}" == "" ]; then
-        vhostdir="/home/wwwroot/${domain}"
+        vhostdir="/fix-data/app/${domain}"
     fi
     echo "Virtual Host Directory: ${vhostdir}"
 
@@ -471,7 +471,7 @@ Add_VHost()
         if [ "${al_name}" == "" ]; then
             al_name="${domain}"
         fi
-        al="access_log  /home/wwwlogs/${al_name}.log;"
+        al="access_log  /dynamic-data/log/nginx/${al_name}.log;"
         echo "You access log filename: ${al_name}.log"
     fi
 
@@ -512,11 +512,11 @@ Add_VHost()
     echo "Create Virtul Host directory......"
     mkdir -p ${vhostdir}
     if [ "${access_log}" == "y" ]; then
-        touch /home/wwwlogs/${al_name}.log
+        touch /dynamic-data/log/nginx/${al_name}.log
     fi
     echo "set permissions of Virtual Host directory......"
     chmod -R 755 ${vhostdir}
-    chown -R www:www ${vhostdir}
+    chown -R app:app ${vhostdir}
 
     Add_VHost_Config
 
@@ -835,13 +835,13 @@ Check_Pureftpd()
 
 Add_Ftp()
 {
-    www_uid=`id -u www`
-    www_gid=`id -g www`
+    app_uid=`id -u app`
+    app_gid=`id -g app`
     cat >/tmp/pass${ftp_account_name}<<EOF
 ${ftp_account_password}
 ${ftp_account_password}
 EOF
-    /fix-data/bin/pureftpd/bin/pure-pw useradd ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -u ${www_uid} -g ${www_gid} -d ${vhostdir} -m < /tmp/pass${ftp_account_name}
+    /fix-data/bin/pureftpd/bin/pure-pw useradd ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -u ${app_uid} -g ${app_gid} -d ${vhostdir} -m < /tmp/pass${ftp_account_name}
     [ $? -eq 0 ] && echo "Created FTP User: ${ftp_account_name} Sucessfully." || echo "FTP User: ${ftp_account_name} already exists!"
     rm -f /tmp/pass${ftp_account_name}
 }
@@ -872,9 +872,9 @@ EOF
     Echo_Yellow "Enter directory for ftp account ${ftp_account_name}: "
     read vhostdir
     if [ "${vhostdir}" != "" ]; then
-        www_uid=`id -u www`
-        www_gid=`id -g www`
-        /fix-data/bin/pureftpd/bin/pure-pw usermod ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -u ${www_uid} -g ${www_gid} -d ${vhostdir} -m
+        app_uid=`id -u app`
+        app_gid=`id -g app`
+        /fix-data/bin/pureftpd/bin/pure-pw usermod ${ftp_account_name} -f /fix-data/bin/pureftpd/etc/pureftpd.passwd -u ${app_uid} -g ${app_gid} -d ${vhostdir} -m
         [ $? -eq 0 ] && echo "FTP User: ${ftp_account_name} change diretcory Sucessfully." || echo "FTP User: ${ftp_account_name} change directory failed!"
     else
         echo "Directory will not change."
@@ -959,7 +959,7 @@ Add_SSL_Info_Menu()
         if [ "${al_name}" == "" ]; then
             al_name="${domain}"
         fi
-        al="access_log  /home/wwwlogs/${al_name}.log;"
+        al="access_log  /dynamic-data/log/nginx/${al_name}.log;"
         echo "You access log filename: ${al_name}.log"
     fi
 
@@ -1256,7 +1256,7 @@ Add_Dns_SSL()
             mkdir -p ${vhostdir}
             echo "set permissions of Virtual Host directory......"
             chmod -R 755 ${vhostdir}
-            chown -R www:www ${vhostdir}
+            chown -R app:app ${vhostdir}
         fi
 
         if [ ! -s "/fix-data/bin/nginx/conf/vhost/${domain}.conf" ]; then

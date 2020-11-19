@@ -237,7 +237,7 @@ Upgrade_PHP_53()
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     patch -p1 < ${cur_dir}/src/patch/php-5.3-multipart-form-data.patch
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} ${PHP_Modules_Options}
     fi
@@ -305,11 +305,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -337,7 +337,7 @@ Upgrade_PHP_54()
     Echo_Blue "Start install php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-intl --with-xsl ${PHP_Modules_Options}
     fi
@@ -405,11 +405,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -437,7 +437,7 @@ Upgrade_PHP_556()
     Echo_Blue "Start install php-${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --enable-intl --with-xsl ${PHP_Modules_Options}
     fi
@@ -510,7 +510,7 @@ EOF
     fi
 
     echo "Download Opcache Control Panel..."
-    \cp ${cur_dir}/conf/ocp.php /home/wwwroot/default/ocp.php
+    \cp ${cur_dir}/conf/ocp.php /fix-data/app/default/ocp.php
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file......"
@@ -524,11 +524,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -556,7 +556,7 @@ Upgrade_PHP_7()
     Echo_Blue "[+] Installing ${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     fi
@@ -597,11 +597,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -631,7 +631,7 @@ Upgrade_PHP_72()
     Echo_Blue "[+] Installing ${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Modules_Options}
     fi
@@ -672,11 +672,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -706,7 +706,7 @@ Upgrade_PHP_73()
     Echo_Blue "[+] Installing ${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/fix-data/bin/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --with-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     fi
@@ -747,11 +747,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -782,7 +782,7 @@ Upgrade_PHP_74()
     Echo_Blue "[+] Installing ${php_version}"
     Tarj_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${Stack}" = "lnmp" ]; then
-        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
+        ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --enable-fpm --with-fpm-user=app --with-fpm-group=app --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     else
         ./configure --prefix=/fix-data/bin/php --with-config-file-path=/fix-data/bin/php/etc --with-config-file-scan-dir=/fix-data/bin/php/conf.d --with-apxs2=/fix-data/bin/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype=/fix-data/bin/freetype --with-jpeg --with-png --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --with-zip --without-libzip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear ${PHP_Modules_Options}
     fi
@@ -823,11 +823,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2

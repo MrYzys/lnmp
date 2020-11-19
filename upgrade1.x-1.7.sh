@@ -98,12 +98,12 @@ if [ "${isSSL}" == "ssl" ]; then
             echo " domain list: ${moredomain}"
         fi
 
-        vhostdir="/home/wwwroot/${domain}"
+        vhostdir="/fix-data/app/${domain}"
         echo "Please enter the directory for the domain: $domain"
-        Echo_Yellow "Default directory: /home/wwwroot/${domain}: "
+        Echo_Yellow "Default directory: /fix-data/app/${domain}: "
         read vhostdir
         if [ "${vhostdir}" == "" ]; then
-            vhostdir="/home/wwwroot/${domain}"
+            vhostdir="/fix-data/app/${domain}"
         fi
         echo "Virtual Host Directory: ${vhostdir}"
 
@@ -201,12 +201,12 @@ if [ "${isSSL}" == "ssl" ]; then
             echo " domain list: ${moredomain}"
         fi
 
-        vhostdir="/home/wwwroot/${domain}"
+        vhostdir="/fix-data/app/${domain}"
         echo "Please enter the directory for the domain: $domain"
-        Echo_Yellow "Default directory: /home/wwwroot/${domain}: "
+        Echo_Yellow "Default directory: /fix-data/app/${domain}: "
         read vhostdir
         if [ "${vhostdir}" == "" ]; then
-            vhostdir="/home/wwwroot/${domain}"
+            vhostdir="/fix-data/app/${domain}"
         fi
         echo "Virtual Host Directory: ${vhostdir}"
 

@@ -98,10 +98,10 @@ Install_Pureftpd()
         \cp ${cur_dir}/conf/lnmp /bin/lnmp
         chmod +x /bin/lnmp
     fi
-    id -u www
+    id -u app
     if [ $? -ne 0 ]; then
-        groupadd www
-        useradd -s /sbin/nologin -g www www
+        groupadd app
+        useradd -s /sbin/nologin -g app app
     fi
 
     if [[ -s /fix-data/bin/pureftpd/sbin/pure-ftpd && -s /fix-data/bin/pureftpd/etc/pure-ftpd.conf && -s /etc/init.d/pureftpd ]]; then

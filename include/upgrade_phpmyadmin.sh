@@ -41,6 +41,6 @@ Upgrade_phpMyAdmin()
     sed -i 's/LNMPORG/LNMP.org_0'$RANDOM`date '+%s'`$RANDOM'9_VPSer.net/g' ${Default_Website_Dir}/phpmyadmin/config.inc.php
     mkdir ${Default_Website_Dir}/phpmyadmin/{upload,save}
     chmod 755 -R ${Default_Website_Dir}/phpmyadmin/
-    chown www:www -R ${Default_Website_Dir}/phpmyadmin/
+    chown app:app -R ${Default_Website_Dir}/phpmyadmin/
     Echo_Green "======== upgrade phpMyAdmin completed ======"
 }

@@ -82,10 +82,10 @@ xcache.coveragedump_directory = ""
 
 EOF
 
-    touch /tmp/xcache && chown www:www /tmp/xcache
+    touch /tmp/xcache && chown app:app /tmp/xcache
 
     \cp -a ${cur_dir}/src/${XCache_Ver}/htdocs ${Default_Website_Dir}/xcache
-    chown www:www -R ${Default_Website_Dir}/xcache
+    chown app:app -R ${Default_Website_Dir}/xcache
 
     if [ -s "${zend_ext}" ]; then
         Restart_PHP

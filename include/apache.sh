@@ -4,13 +4,13 @@ Install_Apache_22()
 {
     Echo_Blue "[+] Installing ${Apache_Ver}..."
     if [ "${Stack}" = "lamp" ]; then
-        groupadd www
-        useradd -s /sbin/nologin -g www www
+        groupadd app
+        useradd -s /sbin/nologin -g app app
         mkdir -p ${Default_Website_Dir}
         chmod +w ${Default_Website_Dir}
-        mkdir -p /home/wwwlogs
-        chmod 777 /home/wwwlogs
-        chown -R www:www ${Default_Website_Dir}
+        mkdir -p /dynamic-data/log/apache
+        chmod 777 /dynamic-data/log/apache
+        chown -R app:app ${Default_Website_Dir}
     fi
     Tarj_Cd ${Apache_Ver}.tar.bz2 ${Apache_Ver}
     ./configure --prefix=/fix-data/bin/apache --enable-mods-shared=most --enable-headers --enable-mime-magic --enable-proxy --enable-so --enable-rewrite --with-ssl --enable-ssl --enable-deflate --enable-suexec --with-included-apr --with-expat=builtin
@@ -44,9 +44,9 @@ Install_Apache_22()
     ln -sf /fix-data/bin/lib/libltdl.so.3 /usr/lib/libltdl.so.3
     mkdir /fix-data/bin/apache/conf/vhost
 
-    if [ "${Default_Website_Dir}" != "/home/wwwroot/default" ]; then
-        sed -i "s#/home/wwwroot/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/httpd.conf
-        sed -i "s#/home/wwwroot/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/extra/httpd-vhosts.conf
+    if [ "${Default_Website_Dir}" != "/fix-data/app/default" ]; then
+        sed -i "s#/fix-data/app/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/httpd.conf
+        sed -i "s#/fix-data/app/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/extra/httpd-vhosts.conf
     fi
 
     if [[ "${PHPSelect}" =~ ^[6789]|10$ ]]; then
@@ -62,13 +62,13 @@ Install_Apache_24()
 {
     Echo_Blue "[+] Installing ${Apache_Ver}..."
     if [ "${Stack}" = "lamp" ]; then
-        groupadd www
-        useradd -s /sbin/nologin -g www www
+        groupadd app
+        useradd -s /sbin/nologin -g app app
         mkdir -p ${Default_Website_Dir}
         chmod +w ${Default_Website_Dir}
-        mkdir -p /home/wwwlogs
-        chmod 777 /home/wwwlogs
-        chown -R www:www ${Default_Website_Dir}
+        mkdir -p /dynamic-data/log/apache
+        chmod 777 /dynamic-data/log/apache
+        chown -R app:app ${Default_Website_Dir}
         Install_Openssl_New
         Install_Nghttp2
     fi
@@ -115,9 +115,9 @@ Install_Apache_24()
     mkdir /fix-data/bin/apache/conf/vhost
 
     sed -i 's/NameVirtualHost .*//g' /fix-data/bin/apache/conf/extra/httpd-vhosts.conf
-    if [ "${Default_Website_Dir}" != "/home/wwwroot/default" ]; then
-        sed -i "s#/home/wwwroot/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/httpd.conf
-        sed -i "s#/home/wwwroot/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/extra/httpd-vhosts.conf
+    if [ "${Default_Website_Dir}" != "/fix-data/app/default" ]; then
+        sed -i "s#/fix-data/app/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/httpd.conf
+        sed -i "s#/fix-data/app/default#${Default_Website_Dir}#g" /fix-data/bin/apache/conf/extra/httpd-vhosts.conf
     fi
 
     if [[ "${PHPSelect}" =~ ^[6789]|10$ ]]; then
