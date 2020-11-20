@@ -897,11 +897,11 @@ log_level = notice
 listen = /tmp/php-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
-listen.owner = www
-listen.group = www
+listen.owner = app
+listen.group = app
 listen.mode = 0666
-user = www
-group = www
+user = app
+group = app
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 2
@@ -975,6 +975,6 @@ eof
     sed -i 's/LNMPORG/LNMP.org_0'$RANDOM`date '+%s'`$RANDOM'9_VPSer.net/g' ${Default_Website_Dir}/phpmyadmin/config.inc.php
     mkdir ${Default_Website_Dir}/phpmyadmin/{upload,save}
     chmod 755 -R ${Default_Website_Dir}/phpmyadmin/
-    chown www:www -R ${Default_Website_Dir}/phpmyadmin/
+    chown app:app -R ${Default_Website_Dir}/phpmyadmin/
     echo "============================phpMyAdmin install completed======================="
 }
