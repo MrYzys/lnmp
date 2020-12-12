@@ -295,32 +295,7 @@ EOF
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file......"
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file......"
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -395,32 +370,7 @@ EOF
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file......"
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file......"
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -514,32 +464,7 @@ EOF
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file......"
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file......"
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -587,32 +512,7 @@ Upgrade_PHP_7()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file..."
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -662,32 +562,7 @@ Upgrade_PHP_72()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file..."
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -737,32 +612,7 @@ Upgrade_PHP_73()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file..."
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -813,32 +663,7 @@ Upgrade_PHP_74()
 
 if [ "${Stack}" = "lnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/fix-data/bin/php/etc/php-fpm.conf<<EOF
-[global]
-pid = /fix-data/bin/php/var/run/php-fpm.pid
-error_log = /fix-data/bin/php/var/log/php-fpm.log
-log_level = notice
-
-[www]
-listen = /tmp/php-cgi.sock
-listen.backlog = -1
-listen.allowed_clients = 127.0.0.1
-listen.owner = app
-listen.group = app
-listen.mode = 0666
-user = app
-group = app
-pm = dynamic
-pm.max_children = 10
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 6
-pm.max_requests = 1024
-pm.process_idle_timeout = 10s
-request_terminate_timeout = 100
-request_slowlog_timeout = 0
-slowlog = var/log/slow.log
-EOF
+    cp ${cur_dir}/conf/php/php-fpm.conf /fixdata/bin/${Php_Ver}/etc/php-fpm.conf
 
     echo "Copy php-fpm init.d file..."
     \cp ${cur_dir}/src/php-${php_version}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm

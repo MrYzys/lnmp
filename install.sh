@@ -199,6 +199,15 @@ LAMP_Stack()
     Check_LAMP_Install
 }
 
+SINGLE_PHP()
+{
+    Init_Install
+    Install_PHP
+    LNMP_PHP_Opt
+    Add_LNMP_Startup
+    Check_LNMP_Install
+}
+
 case "${Stack}" in
     lnmp)
         Dispaly_Selection
@@ -221,10 +230,15 @@ case "${Stack}" in
     mphp)
         Install_Multiplephp
         ;;
+
+    php)
+       SINGLE_PHP
+       ;;
     *)
         Echo_Red "Usage: $0 {lnmp|lnmpa|lamp}"
         Echo_Red "Usage: $0 {nginx|db|mphp}"
         ;;
+
 esac
 
 exit
