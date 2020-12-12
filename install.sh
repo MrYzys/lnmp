@@ -201,6 +201,7 @@ LAMP_Stack()
 
 SINGLE_PHP()
 {
+    PHP_Selection
     Init_Install
     Install_PHP
     LNMP_PHP_Opt
@@ -230,7 +231,6 @@ case "${Stack}" in
     mphp)
         Install_Multiplephp
         ;;
-
     php)
        SINGLE_PHP
        ;;
