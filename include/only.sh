@@ -180,19 +180,15 @@ Install_Only_Php()
 {
       clear
     echo "+-----------------------------------------------------------------------+"
-    echo "|      Install MySQL/MariaDB database for LNMP, Written by Licess       |"
+    echo "|      Install PHP for LNMP, Written by Licess       |"
     echo "+-----------------------------------------------------------------------+"
-    echo "|               A tool to install MySQL/MariaDB for LNMP                |"
+    echo "|               A tool to install PHP for LNMP                |"
     echo "+-----------------------------------------------------------------------+"
     echo "|           For more information please visit https://lnmp.org          |"
     echo "+-----------------------------------------------------------------------+"
 
     Get_Dist_Name
-
     PHP_Selection
-
-    Press_Install
-
     Init_Install
     Install_PHP
     LNMP_PHP_Opt
