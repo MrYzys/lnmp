@@ -232,6 +232,7 @@ case "${Stack}" in
         Install_Multiplephp
         ;;
     php)
+       Stack="lnmp"
        Install_Only_Php
        ;;
     *)
