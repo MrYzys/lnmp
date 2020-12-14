@@ -199,15 +199,15 @@ LAMP_Stack()
     Check_LAMP_Install
 }
 
-SINGLE_PHP()
-{
-    PHP_Selection
-    Init_Install
-    Install_PHP
-    LNMP_PHP_Opt
-    Add_LNMP_Startup
-    Check_LNMP_Install
-}
+#SINGLE_PHP()
+#{
+#    PHP_Selection
+#    Init_Install
+#    Install_PHP
+#    LNMP_PHP_Opt
+#    Add_LNMP_Startup
+#    Check_LNMP_Install
+#}
 
 case "${Stack}" in
     lnmp)
@@ -232,7 +232,7 @@ case "${Stack}" in
         Install_Multiplephp
         ;;
     php)
-       SINGLE_PHP
+       Install_Only_Php
        ;;
     *)
         Echo_Red "Usage: $0 {lnmp|lnmpa|lamp}"
